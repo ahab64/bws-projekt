@@ -1,2 +1,2 @@
 # bws-projekt
-Repo für das Projekt 'Klausurenplaner' von Sajie, Furkan und Merlin
+Repo für das Projekt 'Klausurenplaner' von Sajiel, Furkan und Merlin
