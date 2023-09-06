@@ -4,8 +4,6 @@ const port = process.env.PORT || 3000; // Use the default port 3000 or specify a
 
 const { openDatabase, getUser, closeDatabaseConnection } = require('../database/databaseConnection');
 
-var query = "SELECT * FROM User"
-
 // Define a sample route
 app.get('/api/id/:id', (req, res) => {
     const id = req.params.id;
@@ -28,6 +26,13 @@ app.get('/api/id/:id', (req, res) => {
         res.json({mama})
     }
 });
+
+app.post('/api/postData', (req, res) => {
+    // Handle the incoming POST request here
+    const requestData = req.body; // Access the request body
+    console.log('Received POST request:', requestData);
+    res.send('POST request received.'); // Send a response
+  });
 
 // Start the server
 app.listen(port, () => {
