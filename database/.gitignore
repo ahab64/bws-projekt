@@ -1,0 +1,2 @@
+# Ignoriere alle Dateien mit der Erweiterung .log
+*.env
