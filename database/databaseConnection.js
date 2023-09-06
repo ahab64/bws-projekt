@@ -1,10 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
+require('dotenv').config();
 let db;
+const dbUrl = process.env.DB_URL
 
 function openDatabase() {
-db = new sqlite3.Database('database/datenbank.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+db = new sqlite3.Database(dbUrl, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
 if (err) {
-    console.error(err.message);
+    console.error('Fehler:' + err.message);
 } else {
     console.log('Connected to the SQLite database.');
 }

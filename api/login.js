@@ -4,8 +4,10 @@ const port = process.env.PORT || 3000; // Use the default port 3000 or specify a
 
 const { openDatabase, getUser, closeDatabaseConnection } = require('../database/databaseConnection');
 const { getResponse } = require('./response');
+const cors = require('cors');
 
 app.use(express.json()); 
+app.use(cors());
 
 // Define a sample route
 app.get('/api/id/:email', (req, res) => {
