@@ -8,34 +8,37 @@ const { getResponse } = require('./response');
 app.use(express.json()); 
 
 // Define a sample route
-app.get('/api/id/:id', (req, res) => {
-    const id = req.params.id;
-    const papa = "yarak";
-    const mama = "schwanz";
-    if(id == 123){
-        res.json({ papa }); // Return the ID in a JSON response
-        openDatabase();
-        getUser((err, result) => {
-            if (err) {
-              console.error('Error querying data:', err);
-            } else {
-              console.log('Query result:', result);
-            }
-          });
-
-        closeDatabaseConnection();
-    }
-    else{
-        res.json({mama})
-    }
+app.get('/api/id/:email', (req, res) => {
+const email = req.params.email;
+const papa = "yarak";
+const mama = "schwanz";
+    res.json({ papa }); // Return the ID in a JSON response
+    openDatabase();
+    getUser(email ,(err, result) => {
+        if (err) {
+            console.error('Error querying data:', err);
+        } else {
+            console.log('Query result:', getResponse(result));
+        }
+        });
+    closeDatabaseConnection();
 });
 
 app.post('/api/login', (req, res) => {
     // Handle the incoming POST request here
     const requestData = req.body; // Access the request body
     console.log('Received POST request:', requestData);
-    testRes = getResponse("yes");
-    res.json(testRes); // Send a response
+    const email = requestData.email;
+    openDatabase();
+    getUser(email ,(err, result) => {
+        if (err) {
+            console.error('Error querying data:', err);
+        } else {
+            console.log('Query result:', result);
+            res.json(getResponse(result));
+        }
+        });
+    closeDatabaseConnection();
   });
 
 // Start the server
