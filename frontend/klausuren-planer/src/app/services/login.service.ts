@@ -12,8 +12,8 @@ export class LoginService {
   login(username: string, passwordEncrypted: string): Observable<any> {
     const url = 'http://localhost:3000/api/login';
     const data = {
-      username: username,
-      passwordEncrypted: passwordEncrypted
+      email: username,
+      password: passwordEncrypted
     };
     return this.http.post(url, data);
   }
