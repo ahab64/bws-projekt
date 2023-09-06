@@ -1,13 +1,15 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // Create a new database connection
-const db = new sqlite3.Database('database/datenbank.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-  if (err) {
-    console.error(err.message);
-  } else {
-    console.log('Connected to the SQLite database.');
-  }
-});
+function openDatabase(){
+    const db = new sqlite3.Database('database/datenbank.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+        console.error(err.message);
+    } else {
+        console.log('Connected to the SQLite database.');
+    }
+    });
+}
 
 /* Insert data into the table
 const username = 'john_doe';
@@ -21,13 +23,14 @@ db.run(`INSERT INTO users (username, email) VALUES (?, ?)`, [username, email], f
 }); */
 
 // Query data from the table
-
-db.each(`SELECT * FROM Kurse`, (err, row) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log(row);
-});
+function getKurse(){
+    db.each(`SELECT * FROM Kurse`, (err, row) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log(row);
+    });
+}
 
 
 // Close the database connection when you're done
@@ -41,4 +44,4 @@ function closeDatabaseConnection() {
     });
 }
 
-module.exports =  db, closeDatabaseConnection;
+module.exports =  openDatabase, closeDatabaseConnection, getKurse;
