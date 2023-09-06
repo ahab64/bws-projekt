@@ -23,7 +23,8 @@ db.close((err) => {
 }
 }
 
-function queryData(query, callback) {
+function getUser(callback) {
+    var query = 'SELECT * FROM User'
     // Perform the query
     db.all(query, (err, rows) => {
     if (err) {
@@ -36,6 +37,7 @@ function queryData(query, callback) {
         return callback(err, null);
     }
 
+
     // Return the query results to the callback function
     callback(null, rows);
 });
@@ -44,4 +46,4 @@ function queryData(query, callback) {
 
 // Other functions for database operations can go here
 
-module.exports = { openDatabase, queryData, closeDatabaseConnection };
+module.exports = { openDatabase, getUser, closeDatabaseConnection };

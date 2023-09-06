@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000; // Use the default port 3000 or specify a custom one
 
-const { openDatabase, queryData, closeDatabaseConnection } = require('../database/databaseConnection');
+const { openDatabase, getUser, closeDatabaseConnection } = require('../database/databaseConnection');
 
 var query = "SELECT * FROM User"
 
@@ -14,7 +14,7 @@ app.get('/api/id/:id', (req, res) => {
     if(id == 123){
         res.json({ papa }); // Return the ID in a JSON response
         openDatabase();
-        queryData(query, (err, result) => {
+        getUser((err, result) => {
             if (err) {
               console.error('Error querying data:', err);
             } else {
