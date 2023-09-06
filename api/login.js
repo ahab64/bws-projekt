@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000; // Use the default port 3000 or specify a custom one
 
 const { openDatabase, getUser, closeDatabaseConnection } = require('../database/databaseConnection');
-
+const { getResponse } = require('./response');
 
 app.use(express.json()); 
 
@@ -34,11 +34,7 @@ app.post('/api/login', (req, res) => {
     // Handle the incoming POST request here
     const requestData = req.body; // Access the request body
     console.log('Received POST request:', requestData);
-    let testRes = {
-        "status": 200,
-        "message": "login was successfull",
-        "role": "Schwuler"
-    }
+    testRes = getResponse("yes");
     res.json(testRes); // Send a response
   });
 

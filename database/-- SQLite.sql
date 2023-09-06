@@ -1,2 +1,2 @@
 -- SQLite
-INSERT INTO Kurse (name) VALUES ("Deutsch");
+INSERT INTO Passwort (passwort, id_user) VALUES ("yarakgesicht", 1);
