@@ -1,0 +1,30 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { TeacherComponent } from './components/teacher/teacher.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { StudentComponent } from './components/student/student.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { LoginComponent } from './login/login.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    TeacherComponent,
+    AdminComponent,
+    StudentComponent,
+    CalendarComponent,
+    LoginComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
