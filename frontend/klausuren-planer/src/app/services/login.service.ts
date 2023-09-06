@@ -10,7 +10,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   login(username: string, passwordEncrypted: string): Observable<any> {
-    const url = 'http://localhost:3000/api/login';
+    const url = 'http://localhost:3001/api/login';
     const data = {
       email: username,
       password: passwordEncrypted
