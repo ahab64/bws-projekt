@@ -1,8 +1,10 @@
-<h1>Login</h1>
+<h1>{{textInhalte.login.header}}</h1>
 <div>
-    <label for="username">Benutzername/Mail:</label>
+    <label for="username">{{textInhalte.login.mail}}</label>
     <input type="text" id="username" [(ngModel)]="username">
-    <label for="password">Passeword:</label>
+    <label for="password">{{textInhalte.login.pw}}</label>
     <input type="password" id="password" [(ngModel)]="password">
-    <button (click)="onSubmit()">Submit</button>
+    <button (click)="onSubmit()">{{textInhalte.login.login}}</button>
+    <button class="button-spacing" (click)="onRegister()">{{textInhalte.login.register}}</button>
 </div>
+<div *ngIf="loginFailed" class="error-message">Login fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.</div>

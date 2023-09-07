@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000; // Wählen Sie einen Port Ihrer Wahl
+const port = 3001; // Wählen Sie einen Port Ihrer Wahl
 const cors = require('cors');
 
 app.use(cors());
