@@ -11,6 +11,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from  '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { RegistrationComponent } from './components/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     AdminComponent,
     StudentComponent,
     CalendarComponent,
-    LoginComponent
+    LoginComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
