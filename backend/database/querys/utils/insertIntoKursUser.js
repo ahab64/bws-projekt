@@ -1,38 +1,28 @@
-async function utilInsertKursUser(userId, kursId) {
+const { getKursId } = require("./getKursId");
+
+async function utilInsertKursUser(userId, kursId, db) {
     return new Promise((resolve, reject) => {
         const sqlInsertKursUser = 'INSERT INTO "Kurs.User" ("id_user", "id_kurs") VALUES (?, ?)';
         db.run(sqlInsertKursUser, [userId, kursId], function (err) {
             if (err) {
+                console.error('Fehler beim Einfügen in "Kurs.User":', err);
                 reject(err);
             } else {
-                resolve(this);
+                console.log('Erfolgreich in "Kurs.User" eingefügt');
+                resolve(this.lastID);
             }
         });
     });
 }
 
-
-async function insertIntoKursUser(db, userID, kursIds) {
-
+async function insertIntoKursUser(db, userID, kurse) {
     try {
-        db.run('BEGIN TRANSACTION');
-
-        for (let kursId of kursIds) {
-
-            await utilInsertKursUser(userID, kursId)
+        for (let kurs of kurse) {
+            const kursId = await getKursId(kurs, db);
+            const kursUserId = await utilInsertKursUser(userID, kursId, db);
         }
-        db.run('COMMIT', (err) => {
-            if (err) {
-                console.error('Fehler beim Beenden der Transaktion:', err.message);
-            } else {
-                console.log('Transaktion erfolgreich abgeschlossen.');
-            }
-
-        });
-    } catch (error) {
-        console.error('Fehler InsertIntoKursUser:', error.message);
-        // Bei einem Fehler die Transaktion rückgängig machen
-        db.run('ROLLBACK');
+    } catch (err) {
+        console.error('Fehler beim Einfügen in Kurs.User:', err.message);
     }
 }
 
