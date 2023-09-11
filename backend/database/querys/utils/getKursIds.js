@@ -16,7 +16,7 @@ async function getKursIDs(kurse, db) {
             }
         }
 
-        console.log("Kursids erfolgreich zurückgegeben");
+        console.log("Kursids erfolgreich zurückgegeben" + kursIDs[0].toString);
         return kursIDs;
     } catch (error) {
         console.error('Fehler:', error.message);
