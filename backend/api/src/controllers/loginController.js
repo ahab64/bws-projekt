@@ -1,4 +1,3 @@
-const { openDatabase } = require('../../../database/databaseConnection');
 const { getUser } = require('../../../database/querys/userQuerys')
 const { getUserResponse } = require('../utils/getUserResponse');
 

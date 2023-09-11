@@ -3,7 +3,7 @@ require('dotenv').config();
 const dbUrl = process.env.DB_URL
 
 function openDatabase() {
-  return new sqlite3.Database(dbUrl, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  return new sqlite3.Database("/Users/merlinburbach/Public/bws-projekt/backend/database/datenbank.db", sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error('Fehler:' + err.message);
     } else {
