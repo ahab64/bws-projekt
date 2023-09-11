@@ -3,7 +3,7 @@ const { openDatabase, closeDatabaseConnection } = require('../databaseConnection
 const { getUserId } = require('./utils/getUserId');
 const { insertIntoPassword } = require('./utils/insertIntoPassword');
 const { insertIntoUser } = require('./utils/insertIntoUser');
-const { getKursIDs } = require('./utils/getKursIds');
+const { getKursIDs } = require('./utils/getKursId');
 const { insertIntoKursUser } = require('./utils/insertIntoKursUser');
 let db;
 
@@ -23,8 +23,8 @@ function getUser(email, callback) {
       return;
     }
 
-    const courseId = userRow.id;
-    const secondQuery = 'SELECT * FROM passwort WHERE id_user = ?';
+    const courseId = userRow.user_id;
+    const secondQuery = 'SELECT * FROM passwort WHERE user_id = ?';
 
     db.all(secondQuery, [courseId], (secondQueryErr, courseRows) => {
       if (secondQueryErr) {
@@ -49,13 +49,12 @@ async function newUser(name, email, passwort, kurse, rolle) {
   const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
 
   try {
-    let kursIds = [];
+    //let kursIds = [];
     let userId;
 
     userId = await insertIntoUser(name, email, rolle, db);
     await insertIntoPassword(passwort, userId, db);
-    kursIds = await getKursIDs(kurse, db);
-    await insertIntoKursUser(db, userId, kursIds);
+    await insertIntoKursUser(db, userId, kurse);
 
     return userId; // Erfolg: Benutzer-ID zurückgeben
   } catch (error) {
