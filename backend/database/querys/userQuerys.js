@@ -6,6 +6,20 @@ const { insertIntoUser } = require('./utils/insertIntoUser');
 const { getKursIDs } = require('./utils/getKursId');
 const { insertIntoKursUser } = require('./utils/insertIntoKursUser');
 let db;
+const { getUsersInKurs } = require('./utils/getUsersInKurs');
+
+async function getEmailsInKurs(kursName, callback) {
+  db = openDatabase();
+  try {
+    const emails = await getUsersInKurs(kursName, db);
+    callback(null, emails);
+  } catch (error) {
+    console.error('Fehler beim Abrufen der E-Mails im Kurs:', error);
+    callback(error, null);
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
 
 function getUser(email, callback) {
   db = openDatabase();
@@ -68,4 +82,4 @@ async function newUser(name, email, passwort, kurse, rolle) {
 }
 
 
-module.exports = { getUser, newUser };
+module.exports = { getUser, newUser , getEmailsInKurs};
