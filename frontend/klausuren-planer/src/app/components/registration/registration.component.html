@@ -1,1 +1,44 @@
-<p>registration works!</p>
+<div class="registration-container">
+    <h2>Benutzerregistrierung</h2>
+    <form (submit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" [(ngModel)]="user.name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" [(ngModel)]="user.email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Passwort</label>
+        <input type="password" id="password" [(ngModel)]="user.password" required>
+      </div>
+      <div class="form-group">
+        <label for="role">Rolle</label>
+        <select id="role" [(ngModel)]="user.rolle" required>
+          <option value="Student">Student</option>
+          <option value="Admin">Admin</option>
+          <option value="Teacher">Teacher</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="classLevel">Klassenstufe</label>
+        <select id="classLevel" [(ngModel)]="class" required>
+          <option value="1">Klasse 1</option>
+          <option value="2">Klasse 2</option>
+          <option value="3">Klasse 3</option>
+          <!-- Fügen Sie hier weitere Klassenstufen hinzu, falls erforderlich -->
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="courses">Kursliste</label>
+        <select id="courses" [(ngModel)]="user.kurse" required>
+          <option *ngFor="let kurs of kursliste" [value]="kurs">{{ kurs }}</option>
+        </select>
+      </div>
+      <button type="submit">Registrieren</button>
+    </form>
+  </div>
+
+  

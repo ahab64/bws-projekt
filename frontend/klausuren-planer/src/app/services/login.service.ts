@@ -4,20 +4,22 @@ import { Observable } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<any> {
-
     const url = 'http://localhost:3001/api/login';
-     // Verschlüssle das Passwort mit CryptoJS (z.B., AES-Verschlüsselung)
-     const encryptedPassword = CryptoJS.AES.encrypt(password, 'secret_key').toString();
+    // Verschlüssle das Passwort mit CryptoJS (z.B., AES-Verschlüsselung)
+    const encryptedPassword = CryptoJS.AES.encrypt(
+      password,
+      'secret_key'
+    ).toString();
+    console.log(encryptedPassword);
     const data = {
       email: username,
-      password: encryptedPassword
+      password: encryptedPassword,
     };
     return this.http.post(url, data);
   }
