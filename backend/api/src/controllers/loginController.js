@@ -1,4 +1,5 @@
-const { getUser } = require('../../../database/querys/userQuerys')
+const { getUser } = require('../../../database/querys/userQuerys');
+const { decryptData } = require('../utils/decryption');
 const { getUserResponse } = require('../utils/getUserResponse');
 
 function handleGetUser(req, res) {
@@ -19,12 +20,21 @@ function handleLogin(req, res) {
     const requestData = req.body; // Access the request body
     console.log('Received POST request:', requestData);
     const email = requestData.email;
+    const password = requestData.password;
     getUser(email, (err, result) => {
         if (err) {
             console.error('Error querying data:', err);
+            res.status(500).json({ err: 'User not found' });
         } else {
             console.log('Query result:', result);
-            res.json(getUserResponse(result));
+            const userPassword = result.passwort[0].passwort;
+            console.log(result)
+            if (userPassword != password) {
+                res.status(401).json({ error: 'Login failed' });
+            } else {
+                res.json((getUserResponse(result)))
+            }
+
         }
     });
 }

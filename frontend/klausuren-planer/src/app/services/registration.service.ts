@@ -12,11 +12,10 @@ export class RegistrationService {
 
   registration(user: UserExtended) {
     const url = 'http://localhost:3001/api/registration';
-    const encryptedPassword = CryptoJS.AES.encrypt(user.password, 'secret_key').toString();
     const data = {
       name: user.name,
       email: user.email,
-      password: encryptedPassword,
+      password: user.password,
       kurse: user.kurse,
       rolle: user.rolle
     };

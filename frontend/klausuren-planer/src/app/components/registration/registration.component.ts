@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { UserExtended } from 'src/app/models/userExtended.model';
 import { Kurs } from 'src/app/models/kurs.model';
-import * as CryptoJS from 'crypto-js';
 import { UserRolle } from 'src/app/enums/userRollen.enum';
 import { RegistrationService } from 'src/app/services/registration.service';
 import { catchError, throwError } from 'rxjs';
@@ -30,17 +34,21 @@ export class RegistrationComponent {
   };
   registrationFailed: boolean = false;
   isRegistered: boolean = false;
+  isInValid: boolean = false;
 
   registrationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private registrationService: RegistrationService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private registrationService: RegistrationService
+  ) {
     this.registrationForm = this.formBuilder.group({
-      name: '',
-      email: '',
-      password: '',
-      rolle: '',
-      klasse: '',
-      kurse: [''],
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.min(6)]),
+      rolle: new FormControl('', [Validators.required]),
+      klasse: new FormControl('', [Validators.required]),
+      kurse: new FormControl(''),
     });
   }
 
@@ -60,35 +68,43 @@ export class RegistrationComponent {
   }
 
   onSubmit() {
-    const name = this.registrationForm.get('name')?.value;
-    const email = this.registrationForm.get('email')?.value;
-    const password = this.registrationForm.get('password')?.value;
-    const rolle = this.registrationForm.get('rolle')?.value;
-    this.user.name = name;
-    this.user.email = email;
-    this.user.password = password;
-    this.user.kurse;
-    this.user.rolle = rolle;
+    if (this.registrationForm.valid && this.user.kurse.length > 0) {
+      this.isInValid = false;
 
-    console.log(
-      this.user.name,
-      this.user.email,
-      this.user.password,
-      this.user.kurse,
-      this.user.rolle
-    );
+      const name = this.registrationForm.get('name')?.value;
+      const email = this.registrationForm.get('email')?.value;
+      const password = this.registrationForm.get('password')?.value;
+      const rolle = this.registrationForm.get('rolle')?.value;
+      this.user.name = name;
+      this.user.email = email;
+      this.user.password = password;
+      this.user.kurse;
+      this.user.rolle = rolle;
 
-    this.registrationService.registration(this.user).pipe(
-      catchError((error) => {
-        this.registrationFailed = true;
-        console.error('Fehler bei der Anmeldung', error)
-        return throwError(() => error);
-      })
-    )
-    .subscribe((response) => {
-      this.isRegistered = true;
-      console.log(response)
-    })
+      console.log(
+        this.user.name,
+        this.user.email,
+        this.user.password,
+        this.user.kurse,
+        this.user.rolle
+      );
+
+      this.registrationService
+        .registration(this.user)
+        .pipe(
+          catchError((error) => {
+            this.registrationFailed = true;
+            console.error('Fehler beim Registrieren', error);
+            return throwError(() => error);
+          })
+        )
+        .subscribe((response) => {
+          this.isRegistered = true;
+          console.log(response);
+        });
+    } else {
+      console.log('Invalid Form')
+      this.isInValid = true;
+    }
   }
-  }
-
+}

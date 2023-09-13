@@ -52,6 +52,10 @@ button {
   cursor: pointer;
 }
 
+.button-inValid-Form {
+  background-color: rgb(175, 186, 229);
+}
+
 button:hover {
   background-color: #0056b3;
 }
@@ -72,3 +76,10 @@ button:hover {
   display: flex;
   align-items: center;
 }
+
+.error-message {
+  color: red; /* Ändere die Textfarbe auf Rot oder die gewünschte Farbe */
+  font-weight: bold; /* Mache den Text fett oder verwende andere gewünschte Stile */
+  margin-top: 5px; /* Füge einen oberen Abstand hinzu, um Platz für die Fehlermeldung zu schaffen */
+}
+

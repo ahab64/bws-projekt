@@ -12,13 +12,9 @@ export class LoginService {
   login(username: string, password: string): Observable<any> {
     const url = 'http://localhost:3001/api/login';
     // Verschlüssle das Passwort mit CryptoJS (z.B., AES-Verschlüsselung)
-    const encryptedPassword = CryptoJS.AES.encrypt(
-      password,
-      'AlphaKaBeAou874!'
-    ).toString();
     const data = {
       email: username,
-      password: encryptedPassword,
+      password: password,
     };
     return this.http.post(url, data);
   }

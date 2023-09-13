@@ -48,6 +48,5 @@ button:hover {
 }
 
 .button-spacing {
-    margin: 0 10px; /* Hier kannst du den Abstand zwischen den Buttons anpassen, z.B., 10px */
-  }
-  
+  margin: 0 10px; /* Hier kannst du den Abstand zwischen den Buttons anpassen, z.B., 10px */
+}
