@@ -1,10 +1,10 @@
-async function insertIntoUser(name, email, rolle, db) {
+async function insertIntoUser(name, email, rolle, status, db) {
 
     try {
         // Annahme: Du führst die INSERT-Abfrage für den neuen Studenten durch
-        const qryInsertNewUser = "INSERT INTO User (name, email, rolle) VALUES (?, ?, ?)";
+        const qryInsertNewUser = "INSERT INTO User (name, email, rolle, status) VALUES (?, ?, ?, ?)";
         return userId = await new Promise((resolve, reject) => {
-            db.run(qryInsertNewUser, [name, email, rolle], function (err) {
+            db.run(qryInsertNewUser, [name, email, rolle, status], function (err) {
                 if (err) {
                     reject(err);
                 } else {

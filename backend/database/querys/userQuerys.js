@@ -59,14 +59,14 @@ function getUser(email, callback) {
 
 }
 
-async function newUser(name, email, passwort, kurse, rolle) {
+async function newUser(name, email, passwort, kurse, rolle, status) {
   const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
 
   try {
     //let kursIds = [];
     let userId;
 
-    userId = await insertIntoUser(name, email, rolle, db);
+    userId = await insertIntoUser(name, email, rolle,status, db);
     await insertIntoPassword(passwort, userId, db);
     await insertIntoKursUser(db, userId, kurse);
 
@@ -81,5 +81,18 @@ async function newUser(name, email, passwort, kurse, rolle) {
   }
 }
 
+async function updateUserStatus(userId, newStatus) {
+  try {
+    db = openDatabase(); // Öffne die Datenbankverbindung
+    const queryResult = await db.run('UPDATE User SET status = ? WHERE user_id = ?', [newStatus, userId]);
+    return queryResult;
+  } catch (error) {
+    console.error('Fehler bei der Aktualisierung des Benutzerstatus:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db); // Schließe die Datenbankverbindung
+  }
+}
 
-module.exports = { getUser, newUser , getEmailsInKurs};
+
+module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus};

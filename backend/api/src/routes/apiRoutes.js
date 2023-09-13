@@ -3,11 +3,14 @@ const router = express.Router();
 const { handleGetUser, handleLogin } = require('../controllers/loginController');
 const { handleNewUser } = require('../controllers/registrationController');
 const { handleEmailFromKurs } = require('../controllers/emailController');
+const { handleUserApproval } = require('../controllers/userController');
+
 
 router.get('/api/id/:email', handleGetUser);
 router.post('/api/login', handleLogin);
 router.post('/api/registration', handleNewUser);
 router.post('/api/kursemail', handleEmailFromKurs);
+router.post('/api/admin/user-approval', handleUserApproval);
 
 //To Do: Endpunkte für...
 //EMails einer Klasse
