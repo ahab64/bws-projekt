@@ -14,9 +14,8 @@ export class LoginService {
     // Verschlüssle das Passwort mit CryptoJS (z.B., AES-Verschlüsselung)
     const encryptedPassword = CryptoJS.AES.encrypt(
       password,
-      'secret_key'
+      'AlphaKaBeAou874!'
     ).toString();
-    console.log(encryptedPassword);
     const data = {
       email: username,
       password: encryptedPassword,
