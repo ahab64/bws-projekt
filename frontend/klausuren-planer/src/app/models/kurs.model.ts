@@ -1,3 +1,4 @@
 export interface Kurs {
-    kursName: string
+    name: string
+    lehrer: string
 }
