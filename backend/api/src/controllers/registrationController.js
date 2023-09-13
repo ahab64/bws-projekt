@@ -1,4 +1,4 @@
-const { newUser } = require("../../../database/querys/userQuerys");
+const { newUser } = require('../../../database/querys/userQuerys')
 const validator = require('validator');
 
 async function handleNewUser(req, res) {
@@ -8,7 +8,6 @@ async function handleNewUser(req, res) {
     const pw = newUserData.password;
     const kurse = newUserData.kurse;
     const rolle = newUserData.rolle;
-    const status = "Pending"
 
     // Datenvalidierung - Beispiel: Überprüfung der E-Mail-Adresse
     if (!validator.isEmail(email)) {
@@ -17,7 +16,7 @@ async function handleNewUser(req, res) {
     }
 
     try {
-        const result = await newUser(name, email, pw, kurse, rolle, status);
+        const result = await newUser(name, email, pw, kurse, rolle);
         console.log('Neuer Benutzer wurde erstellt:', result);
         res.status(201).json({ status: 201, message: 'Benutzer erfolgreich erstellt', userId: result });
     } catch (error) {
@@ -25,7 +24,5 @@ async function handleNewUser(req, res) {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 }
-
-
 
 module.exports = { handleNewUser };

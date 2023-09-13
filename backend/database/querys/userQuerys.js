@@ -1,5 +1,4 @@
-// userQueries.js (Neues Modul für Benutzerabfragen)
-const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); // Import der databaseConnection.js-Datei
+const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); 
 const { getUserId } = require('./utils/getUserId');
 const { insertIntoPassword } = require('./utils/insertIntoPassword');
 const { insertIntoUser } = require('./utils/insertIntoUser');
@@ -59,14 +58,14 @@ function getUser(email, callback) {
 
 }
 
-async function newUser(name, email, passwort, kurse, rolle, status) {
+async function newUser(name, email, passwort, kurse, rolle) {
   const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
 
   try {
     //let kursIds = [];
     let userId;
 
-    userId = await insertIntoUser(name, email, rolle,status, db);
+    userId = await insertIntoUser(name, email, rolle, db);
     await insertIntoPassword(passwort, userId, db);
     await insertIntoKursUser(db, userId, kurse);
 
@@ -77,7 +76,7 @@ async function newUser(name, email, passwort, kurse, rolle, status) {
     // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
-    closeDatabaseConnection(db); // Die Datenbankverbindung schließen, wenn alle Operationen abgeschlossen sind
+    closeDatabaseConnection(db); 
   }
 }
 
