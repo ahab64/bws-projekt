@@ -1,0 +1,9 @@
+{
+    "login": {
+        "header": "Klausurenplaner der BWS-Hofheim",
+        "pw": "Passwort:",
+        "mail": "E-Mail:",
+        "login": "Anmelden",
+        "register": "Registrieren"
+    }
+}

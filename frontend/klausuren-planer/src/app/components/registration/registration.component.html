@@ -1,1 +1,48 @@
-<p>registration works!</p>
+<div class="registration-container">
+  <h2>Benutzerregistrierung</h2>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" formControlName="name" required>
+    </div>
+    <div class="form-group">
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" formControlName="email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Passwort</label>
+      <input type="password" id="password" formControlName="password" required>
+    </div>
+    <div class="form-group">
+      <label for="role">Rolle</label>
+      <select id="role" formControlName="rolle" required>
+        <option value="Student">Student</option>
+        <option value="Admin">Admin</option>
+        <option value="Teacher">Teacher</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="classLevel">Klassenstufe</label>
+      <select id="classLevel" formControlName="klasse" required>
+        <option *ngFor="let stufe of klassenstufen">{{ stufe }}</option>
+        <!-- Fügen Sie hier weitere Klassenstufen hinzu, falls erforderlich -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="kurse">Kursliste</label>
+      <div class="course-list">
+        <ul class="checkbox-list">
+          <li *ngFor="let kurs of kursliste; let i = index">
+            <label class="checkbox-label">
+              <input type="checkbox" [id]="kurs.name" formControlName="kurse" [value]="kurs" (change)="onChangeKursliste($event, kurs)">
+              {{ kurs.name + " mit " + kurs.lehrer }}
+            </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <button type="submit" >Registrieren</button>
+  </form>
+</div>
+<div *ngIf="registrationFailed" class="error-message">Registrierung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.</div>
+<div *ngIf="isRegistered" class="error-message">Registrierung erfolgreich. Warten auf Freischaltung durch Admin.</div>
