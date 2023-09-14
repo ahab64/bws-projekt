@@ -1,5 +1,6 @@
 const { getEmailsInKurs } = require('../../../database/querys/userQuerys');
 
+
 async function handleEmailFromKurs(req, res) {
   const { kurse } = req.body; // Hier ändern wir req.params auf req.body
 

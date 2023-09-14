@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "sqlite3": "^5.1.6",
+    "dotenv": "^16.3.1",
+    "angular" : "^1.8.3",
     "validator": "^13.11.0"
   }
 }

@@ -1,7 +1,5 @@
-const { newUser } = require("../../../database/querys/userQuerys");
+const { newUser } = require('../../../database/querys/userQuerys')
 const validator = require('validator');
-
-
 
 async function handleNewUser(req, res) {
     const newUserData = req.body;
@@ -20,11 +18,11 @@ async function handleNewUser(req, res) {
     try {
         const result = await newUser(name, email, pw, kurse, rolle);
         console.log('Neuer Benutzer wurde erstellt:', result);
-        res.status(201).json({ status: 201, message: 'Benutzer erfolgreich erstellt', userId: result, });
+        res.status(201).json({ status: 201, message: 'Benutzer erfolgreich erstellt', userId: result });
     } catch (error) {
         console.error('Fehler bei der Benutzererstellung:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 }
 
-module.exports = { handleNewUser}
+module.exports = { handleNewUser };

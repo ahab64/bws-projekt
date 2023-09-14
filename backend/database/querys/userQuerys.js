@@ -1,5 +1,4 @@
-// userQueries.js (Neues Modul für Benutzerabfragen)
-const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); // Import der databaseConnection.js-Datei
+const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); 
 const { getUserId } = require('./utils/getUserId');
 const { insertIntoPassword } = require('./utils/insertIntoPassword');
 const { insertIntoUser } = require('./utils/insertIntoUser');
@@ -77,9 +76,22 @@ async function newUser(name, email, passwort, kurse, rolle) {
     // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
-    closeDatabaseConnection(db); // Die Datenbankverbindung schließen, wenn alle Operationen abgeschlossen sind
+    closeDatabaseConnection(db); 
+  }
+}
+
+async function updateUserStatus(userId, newStatus) {
+  try {
+    db = openDatabase(); // Öffne die Datenbankverbindung
+    const queryResult = await db.run('UPDATE User SET status = ? WHERE user_id = ?', [newStatus, userId]);
+    return queryResult;
+  } catch (error) {
+    console.error('Fehler bei der Aktualisierung des Benutzerstatus:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db); // Schließe die Datenbankverbindung
   }
 }
 
 
-module.exports = { getUser, newUser , getEmailsInKurs};
+module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus};
