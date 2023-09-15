@@ -1,5 +1,4 @@
 const { getUser } = require('../../../database/querys/userQuerys');
-const { decryptData } = require('../utils/decryption');
 const { getUserResponse } = require('../utils/getUserResponse');
 
 function handleGetUser(req, res) {
