@@ -1,4 +1,4 @@
-const { newUser } = require('../../../database/querys/userQuerys')
+const { newUser } = require('../../../database/querys/main')
 const validator = require('validator');
 
 async function handleNewUser(req, res) {
