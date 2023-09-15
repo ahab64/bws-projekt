@@ -82,16 +82,27 @@ async function newUser(name, email, passwort, kurse, rolle) {
 
 async function updateUserStatus(userId, newStatus) {
   try {
-    db = openDatabase(); // Öffne die Datenbankverbindung
+    db = openDatabase(); 
     const queryResult = await db.run('UPDATE User SET status = ? WHERE user_id = ?', [newStatus, userId]);
     return queryResult;
   } catch (error) {
     console.error('Fehler bei der Aktualisierung des Benutzerstatus:', error);
     throw error;
   } finally {
-    closeDatabaseConnection(db); // Schließe die Datenbankverbindung
+    closeDatabaseConnection(db); 
+    }
+}
+
+async function getUserKurse(userId) {
+  try {
+      //SQL Statement noch falsch
+      const kurse = await db.run('SELECT * FROM Kurse JOIN User WHERE user_id = ?', [userId]);
+      return kurse;
+  } catch (error) {
+      throw error;
   }
 }
 
 
-module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus};
+
+module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus, getUserKurse};
