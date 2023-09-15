@@ -1,4 +1,4 @@
-const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); 
+const { openDatabase, closeDatabaseConnection } = require('../databaseConnection');
 const { getUserId } = require('./utils/getUserId');
 const { insertIntoPassword } = require('./utils/insertIntoPassword');
 const { insertIntoUser } = require('./utils/insertIntoUser');
@@ -76,33 +76,47 @@ async function newUser(name, email, passwort, kurse, rolle) {
     // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
-    closeDatabaseConnection(db); 
+    closeDatabaseConnection(db);
   }
 }
 
 async function updateUserStatus(userId, newStatus) {
   try {
-    db = openDatabase(); 
-    const queryResult = await db.run('UPDATE User SET status = ? WHERE user_id = ?', [newStatus, userId]);
-    return queryResult;
+    db = openDatabase();
+    await updateStatus(this.db, userId, newStatus);
   } catch (error) {
-    console.error('Fehler bei der Aktualisierung des Benutzerstatus:', error);
     throw error;
   } finally {
-    closeDatabaseConnection(db); 
-    }
+    closeDatabaseConnection(db);
+  }
 }
 
 async function getUserKurse(userId) {
   try {
-      //SQL Statement noch falsch
-      const kurse = await db.run('SELECT * FROM Kurse JOIN User WHERE user_id = ?', [userId]);
-      return kurse;
+    db = openDatabase();
+
+    const query = 'SELECT Kurse.name FROM Kurse INNER JOIN "Kurs.User" ON Kurse.id = "Kurs.User".id_kurs WHERE "Kurs.User".id_user = ?';
+    console.log('SQL-Abfrage:', query);
+    console.log('SQL-Parameter:', userId);
+
+    const kurse = await db.all(query, [userId]);
+    console.log('Kurse abgerufen:', kurse);
+
+    if (!kurse || kurse.length === 0) {
+      console.log('Keine Kurse gefunden für userId:', userId);
+      throw new Error('Keine Kurse gefunden');
+    }
+
+    return kurse;
   } catch (error) {
-      throw error;
+    console.error('Fehler beim Abrufen der Kurse:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db);
   }
 }
 
 
 
-module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus, getUserKurse};
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getUserKurse };
+
