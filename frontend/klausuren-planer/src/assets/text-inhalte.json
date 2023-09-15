@@ -1,9 +1,30 @@
 {
-    "login": {
-        "header": "Klausurenplaner der BWS-Hofheim",
-        "pw": "Passwort:",
-        "mail": "E-Mail:",
-        "login": "Anmelden",
-        "register": "Registrieren"
+  "login": {
+    "header": "Klausurenplaner der BWS-Hofheim",
+    "pw": "Passwort:",
+    "mail": "E-Mail:",
+    "login": "Anmelden",
+    "register": "Registrieren"
+  },
+  "registration": {
+    "header": "Benutzerregistrierung",
+    "data": {
+      "name": "Name",
+      "email": "E-mail",
+      "pw": "Passwort:",
+      "role": {
+        "role": "Rolle",
+        "student": "Schüler*in",
+        "admin": "Admin",
+        "teacher": "Lehrer*in"
+      }
+    },
+    "klassenstufe": "Klassenstufe",
+    "kursliste": "Kursliste",
+    "errors": {
+      "failed": "Registrierung fehlgeschlagen. Probieren Sie es zu einem späteren Zeitpunkt erneut.",
+      "registed": "Registrierung erfolgreich. Warten auf Freischaltung durch Admin.",
+      "invalidForm": "Registrierung fehlgeschlagen. Prüfen Sie Ihre Eingaben."
     }
+  }
 }
