@@ -12,11 +12,15 @@ export class RegistrationService {
 
   registration(user: UserExtended) {
     const url = 'http://localhost:3001/api/registration';
+    const kurseNamen: string[] = [];
+    user.kurse.forEach(kurs => {
+      kurseNamen.push(kurs.name)
+    }); 
     const data = {
       name: user.name,
       email: user.email,
       password: user.password,
-      kurse: user.kurse,
+      kurse: kurseNamen,
       rolle: user.rolle
     };
     return this.http.post(url, data);

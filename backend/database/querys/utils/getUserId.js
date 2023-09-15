@@ -1,6 +1,3 @@
-const { openDatabase, closeDatabaseConnection } = require("../../databaseConnection");
-
-
 async function getUserId(email, db) {
     return new Promise((resolve, reject) => {
         const qryGetUserId = "SELECT User.id FROM User WHERE email like ?";

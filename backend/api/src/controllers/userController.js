@@ -1,4 +1,4 @@
-const { updateUserStatus } = require('../../../database/querys/userQuerys'); 
+const { updateUserStatus } = require('../../../database/querys/main'); 
 
 async function handleUserApproval(req, res) {
     const { userId, action } = req.body;

@@ -6,7 +6,9 @@ const { getKursIDs } = require('./utils/getKursId');
 const { insertIntoKursUser } = require('./utils/insertIntoKursUser');
 let db;
 const { getUsersInKurs } = require('./utils/getUsersInKurs');
+const { updateStatus } = require('./utils/updateUserStatus');
 
+//TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
   db = openDatabase();
   try {
@@ -20,6 +22,7 @@ async function getEmailsInKurs(kursName, callback) {
   }
 }
 
+//To do: refactor so logic is seperated in getUserFile
 function getUser(email, callback) {
   db = openDatabase();
   const query = 'SELECT * FROM User WHERE email = ?';
@@ -48,6 +51,7 @@ function getUser(email, callback) {
           user: userRow.name,
           email: userRow.email,
           rolle: userRow.rolle,
+          status: userRow.status,
           passwort: courseRows,
         };
         callback(null, userData);
@@ -57,7 +61,7 @@ function getUser(email, callback) {
   closeDatabaseConnection(this.db);
 
 }
-
+//TO DO: remove error handling here
 async function newUser(name, email, passwort, kurse, rolle) {
   const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
 
@@ -81,16 +85,14 @@ async function newUser(name, email, passwort, kurse, rolle) {
 }
 
 async function updateUserStatus(userId, newStatus) {
-  try {
-    db = openDatabase(); // Öffne die Datenbankverbindung
-    const queryResult = await db.run('UPDATE User SET status = ? WHERE user_id = ?', [newStatus, userId]);
-    return queryResult;
-  } catch (error) {
-    console.error('Fehler bei der Aktualisierung des Benutzerstatus:', error);
+  try{
+    db = openDatabase();
+    await updateStatus (this.db, userId, newStatus);
+  } catch(error) {
     throw error;
   } finally {
-    closeDatabaseConnection(db); // Schließe die Datenbankverbindung
-  }
+    closeDatabaseConnection(db); 
+  } 
 }
 
 

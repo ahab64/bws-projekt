@@ -1,4 +1,4 @@
-const { getUser } = require('../../../database/querys/userQuerys');
+const { getUser } = require('../../../database/querys/main');
 const { getUserResponse } = require('../utils/getUserResponse');
 
 function handleGetUser(req, res) {
@@ -26,9 +26,10 @@ function handleLogin(req, res) {
             res.status(500).json({ err: 'User not found' });
         } else {
             console.log('Query result:', result);
+            const userStatus = result.status;
+            console.log(userStatus);
             const userPassword = result.passwort[0].passwort;
-            console.log(result)
-            if (userPassword != password) {
+            if (userPassword != password || userStatus !=='Approved') {
                 res.status(401).json({ error: 'Login failed' });
             } else {
                 res.json((getUserResponse(result)))

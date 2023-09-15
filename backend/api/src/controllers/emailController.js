@@ -1,4 +1,4 @@
-const { getEmailsInKurs } = require('../../../database/querys/userQuerys');
+const { getEmailsInKurs } = require('../../../database/querys/main');
 
 
 async function handleEmailFromKurs(req, res) {
