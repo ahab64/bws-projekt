@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -10,13 +10,14 @@ import { Kurs } from 'src/app/models/kurs.model';
 import { UserRolle } from 'src/app/enums/userRollen.enum';
 import { RegistrationService } from 'src/app/services/registration.service';
 import { catchError, throwError } from 'rxjs';
+import { TextContentService } from 'src/app/services/text-content.service';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnInit {
   klassenstufen = ['10', '11', '12', '13']; // Hier können Sie die verfügbaren Klassenstufen hinzufügen/ändern
   kursliste: Kurs[] = [
     { name: 'Mathe', lehrer: 'Max Mustermann' },
@@ -35,12 +36,14 @@ export class RegistrationComponent {
   registrationFailed: boolean = false;
   isRegistered: boolean = false;
   isInValid: boolean = false;
+  textInhalte: any;
 
   registrationForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private textContentService: TextContentService
   ) {
     this.registrationForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
@@ -49,6 +52,13 @@ export class RegistrationComponent {
       rolle: new FormControl('', [Validators.required]),
       klasse: new FormControl('', [Validators.required]),
       kurse: new FormControl(''),
+    });
+  }
+
+  ngOnInit() {
+    this.textContentService.getTextContents().subscribe((data) => {
+      this.textInhalte = data;
+      console.log(this.textInhalte);
     });
   }
 

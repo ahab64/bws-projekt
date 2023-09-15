@@ -1,40 +1,41 @@
 <div class="registration-container">
-  <h2>Benutzerregistrierung</h2>
+  <h2>{{textInhalte.registration.header}}</h2>
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="name">{{textInhalte.registration.data.name}}</label>
       <input type="text" id="name" formControlName="name">
     </div>
     <div class="form-group">
-      <label for="email">E-Mail</label>
+      <label for="email">{{textInhalte.registration.data.email}}</label>
       <input type="email" id="email" formControlName="email">
     </div>
     <div class="form-group">
-      <label for="password">Passwort</label>
+      <label for="password">{{textInhalte.registration.data.pw}}</label>
       <input type="password" id="password" formControlName="password">
     </div>
     <div class="form-group">
-      <label for="role">Rolle</label>
-      <select id="role" formControlName="rolle" >
-        <option value="Student">Student</option>
-        <option value="Admin">Admin</option>
-        <option value="Teacher">Teacher</option>
+      <label for="role">{{textInhalte.registration.data.role.role}}</label>
+      <select id="role" formControlName="rolle">
+        <option value="Student">{{textInhalte.registration.data.role.student}}</option>
+        <option value="Admin">{{textInhalte.registration.data.role.admin}}</option>
+        <option value="Teacher">{{textInhalte.registration.data.role.teacher}}</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="classLevel">Klassenstufe</label>
+      <label for="classLevel">{{textInhalte.registration.klassenstufe}}</label>
       <select id="classLevel" formControlName="klasse">
         <option *ngFor="let stufe of klassenstufen">{{ stufe }}</option>
         <!-- Fügen Sie hier weitere Klassenstufen hinzu, falls erforderlich -->
       </select>
     </div>
     <div class="form-group">
-      <label for="kurse">Kursliste</label>
+      <label for="kurse">{{textInhalte.registration.kursliste}}</label>
       <div class="course-list">
         <ul class="checkbox-list">
           <li *ngFor="let kurs of kursliste; let i = index">
             <label class="checkbox-label">
-              <input type="checkbox" [id]="kurs.name" formControlName="kurse" [value]="kurs" (change)="onChangeKursliste($event, kurs)">
+              <input type="checkbox" [id]="kurs.name" formControlName="kurse" [value]="kurs"
+                (change)="onChangeKursliste($event, kurs)">
               {{ kurs.name + " mit " + kurs.lehrer }}
             </label>
           </li>
@@ -43,7 +44,7 @@
     </div>
     <button [class.button-inValid-Form]="!this.registrationForm.valid">Registrieren</button>
   </form>
-  <div *ngIf="registrationFailed" class="error-message">Registrierung fehlgeschlagen. Probieren Sie es zu einem späteren Zeitpunkt erneut.</div>
-<div *ngIf="isRegistered" class="error-message">Registrierung erfolgreich. Warten auf Freischaltung durch Admin.</div>
-<div *ngIf="isInValid" class="error-message">Registrierung fehlgeschlagen. Prüfen Sie Ihre Eingaben.</div>
+  <div *ngIf="registrationFailed" class="error-message">{{textInhalte.registration.errors.failed}}</div>
+  <div *ngIf="isRegistered" class="error-message">{{textInhalte.registration.errors.registed}}</div>
+  <div *ngIf="isInValid" class="error-message">{{textInhalte.registration.errors.invalidForm}}</div>
 </div>
