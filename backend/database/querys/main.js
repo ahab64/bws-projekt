@@ -1,4 +1,4 @@
-const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); 
+const { openDatabase, closeDatabaseConnection } = require('../databaseConnection');
 const { getUserId } = require('./utils/getUserId');
 const { insertIntoPassword } = require('./utils/insertIntoPassword');
 const { insertIntoUser } = require('./utils/insertIntoUser');
@@ -7,6 +7,7 @@ const { insertIntoKursUser } = require('./utils/insertIntoKursUser');
 let db;
 const { getUsersInKurs } = require('./utils/getUsersInKurs');
 const { updateStatus } = require('./utils/updateUserStatus');
+const { getKurseFromUser } = require('./utils/getKurseFromUser');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
@@ -80,20 +81,43 @@ async function newUser(name, email, password, kurse, rolle) {
     // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
-    closeDatabaseConnection(db); 
+    closeDatabaseConnection(db);
   }
 }
 
 async function updateUserStatus(userId, newStatus) {
-  try{
+  try {
     db = openDatabase();
-    await updateStatus (db, userId, newStatus);
-  } catch(error) {
+    await updateStatus(db, userId, newStatus);
+  } catch (error) {
     throw error;
   } finally {
-    closeDatabaseConnection(db); 
-  } 
+    closeDatabaseConnection(db);
+  }
 }
 
 
-module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus};
+async function getKurseUser(userId) {
+  try {
+    db = openDatabase();
+
+    const kurse = await getKurseFromUser(userId, db);
+
+    if (!kurse || kurse.length === 0) {
+      console.log('Keine Kurse gefunden für userId:', userId);
+      throw new Error('Keine Kurse gefunden');
+    }
+
+    return kurse;
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Kurse:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+
+
+
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser };
