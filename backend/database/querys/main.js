@@ -40,7 +40,7 @@ function getUser(email, callback) {
     }
 
     const courseId = userRow.user_id;
-    const secondQuery = 'SELECT * FROM passwort WHERE user_id = ?';
+    const secondQuery = 'SELECT * FROM Password WHERE user_id = ?';
 
     db.all(secondQuery, [courseId], (secondQueryErr, courseRows) => {
       if (secondQueryErr) {
@@ -52,7 +52,7 @@ function getUser(email, callback) {
           email: userRow.email,
           rolle: userRow.rolle,
           status: userRow.status,
-          passwort: courseRows,
+          password: courseRows,
         };
         callback(null, userData);
       }
@@ -62,7 +62,7 @@ function getUser(email, callback) {
 
 }
 //TO DO: remove error handling here
-async function newUser(name, email, passwort, kurse, rolle) {
+async function newUser(name, email, password, kurse, rolle) {
   const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
 
   try {
@@ -70,7 +70,7 @@ async function newUser(name, email, passwort, kurse, rolle) {
     let userId;
 
     userId = await insertIntoUser(name, email, rolle, db);
-    await insertIntoPassword(passwort, userId, db);
+    await insertIntoPassword(password, userId, db);
     await insertIntoKursUser(db, userId, kurse);
 
     return userId; // Erfolg: Benutzer-ID zurückgeben
@@ -87,7 +87,7 @@ async function newUser(name, email, passwort, kurse, rolle) {
 async function updateUserStatus(userId, newStatus) {
   try{
     db = openDatabase();
-    await updateStatus (this.db, userId, newStatus);
+    await updateStatus (db, userId, newStatus);
   } catch(error) {
     throw error;
   } finally {
