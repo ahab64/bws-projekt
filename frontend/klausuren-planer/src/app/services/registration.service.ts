@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserExtended } from '../models/userExtended.model';
-import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
