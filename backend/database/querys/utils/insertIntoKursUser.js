@@ -2,7 +2,7 @@ const { getKursId } = require("./getKursId");
 
 async function utilInsertKursUser(userId, kursId, db) {
     return new Promise((resolve, reject) => {
-        const sqlInsertKursUser = 'INSERT INTO "Kurs.User" ("id_user", "id_kurs") VALUES (?, ?)';
+        const sqlInsertKursUser = 'INSERT INTO "Kurs.User" ("user_id", "kurs_id") VALUES (?, ?)';
         db.run(sqlInsertKursUser, [userId, kursId], function (err) {
             if (err) {
                 console.error('Fehler beim Einfügen in "Kurs.User":', err);

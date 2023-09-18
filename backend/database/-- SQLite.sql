@@ -1,2 +1,2 @@
 -- SQLite
-INSERT INTO Passwort (passwort, id_user) VALUES ("yarakgesicht", 1);
+SELECT * FROM User;

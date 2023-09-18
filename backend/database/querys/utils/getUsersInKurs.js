@@ -2,8 +2,8 @@ async function getUsersInKurs(kurse, db) {
     const sqlSelectEmails = `
       SELECT User.email 
       FROM User 
-      INNER JOIN "Kurs.User" ON User.user_id = "Kurs.User".id_user 
-      INNER JOIN Kurse ON "Kurs.User".id_kurs = Kurse.id 
+      INNER JOIN "Kurs.User" ON User.user_id = "Kurs.User".user_id 
+      INNER JOIN Kurse ON "Kurs.User".kurs_id = Kurse.kurs_id 
       WHERE Kurse.name = ?`;
     
     return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
-async function insertIntoPassword(passwort, userId, db) {
-    const qryInsertPassword = "INSERT INTO Passwort ('user_id', 'passwort') VALUES (?, ?)";
+async function insertIntoPassword(password, userId, db) {
+    const qryInsertPassword = "INSERT INTO Password ('user_id', 'password') VALUES (?, ?)";
     return new Promise((resolve, reject) => {
-      db.run(qryInsertPassword, [userId, passwort], function (err) {
+      db.run(qryInsertPassword, [userId, password], function (err) {
         if (err) {
           reject(err);
         } else {

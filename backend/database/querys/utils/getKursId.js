@@ -1,5 +1,5 @@
 async function getKursId(kurs, db) {
-    const sqlSelectKursID = 'SELECT "id" FROM "Kurse" WHERE "name" = ?';
+    const sqlSelectKursID = 'SELECT kurs_id FROM Kurse WHERE name = ?';
 
     return new Promise((resolve, reject) => {
         db.get(sqlSelectKursID, [kurs], function (err, row) {

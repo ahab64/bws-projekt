@@ -28,7 +28,7 @@ function handleLogin(req, res) {
             console.log('Query result:', result);
             const userStatus = result.status;
             console.log(userStatus);
-            const userPassword = result.passwort[0].passwort;
+            const userPassword = result.password[0].password;
             if (userPassword != password || userStatus !=='Approved') {
                 res.status(401).json({ error: 'Login failed' });
             } else {
