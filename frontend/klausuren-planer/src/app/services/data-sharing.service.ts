@@ -20,4 +20,8 @@ export class DataSharingService {
   getUser(): User {
     return this.user;
   }
+
+  getUserId(): string {
+    return this.user.userId;
+  }
 }

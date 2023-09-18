@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
         catchError((error) => {
           this.loginFailed = true;
           console.error('Fehler bei der Anmeldung:', error);
-          // Wir geben ein neues Observable zurück, das einen leeren Fehler zurückgibt
           return throwError(() => error);
         })
       )
