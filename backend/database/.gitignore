@@ -3,3 +3,4 @@
 *.env
 datenbank.sqbpro
 *.DS_Store
+*.db

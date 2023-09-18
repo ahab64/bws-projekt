@@ -1,8 +1,7 @@
 const { getEmailsInKurs } = require('../../../database/querys/main');
 
-
 async function handleEmailFromKurs(req, res) {
-  const { kurse } = req.body; // Hier ändern wir req.params auf req.body
+  const { kurse } = req.body; 
 
   getEmailsInKurs(kurse, (err, emails) => {
     if (err) {
@@ -13,6 +12,4 @@ async function handleEmailFromKurs(req, res) {
   });
 }
 
-module.exports = {
-  handleEmailFromKurs
-};
+module.exports = { handleEmailFromKurs };
