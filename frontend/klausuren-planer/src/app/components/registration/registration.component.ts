@@ -20,10 +20,18 @@ import { TextContentService } from 'src/app/services/text-content.service';
 export class RegistrationComponent implements OnInit {
   klassenstufen = ['10', '11', '12', '13']; // Hier können Sie die verfügbaren Klassenstufen hinzufügen/ändern
   kursliste: Kurs[] = [
-    { name: 'Mathe', lehrer: 'Max Mustermann' },
-    { name: 'Sport', lehrer: 'Sarah Mustermann' },
-    { name: 'Deutsch', lehrer: 'Max Mustermann' },
-    { name: 'Bio', lehrer: 'Max Mustermann' },
+    { name: '10_OS_Mathe_Gg', lehrer: 'Peter Grüning' },
+    { name: '10_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
+    { name: '11_OS_Mathe_Si', lehrer: 'Max Mustermann' },
+    { name: '11_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
+    { name: '10_OS_Mathe_Gg', lehrer: 'Peter Grüning' },
+    { name: '10_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
+    { name: '11_OS_Mathe_Si', lehrer: 'Max Mustermann' },
+    { name: '11_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
+    { name: '10_OS_Mathe_Gg', lehrer: 'Peter Grüning' },
+    { name: '10_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
+    { name: '11_OS_Mathe_Si', lehrer: 'Max Mustermann' },
+    { name: '11_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
   ]; // Hier können Sie die verfügbaren Kurse hinzufügen/ändern
 
   user: UserExtended = {

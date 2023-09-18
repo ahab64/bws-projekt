@@ -7,8 +7,8 @@ async function getKursId(kurs, db) {
                 reject(err);
             } else {
                 if (row) {
-                    console.log('Kurs Id erfolgreich selteced' + row.id)
-                    resolve(row.id);
+                    console.log('Kurs Id erfolgreich selected: ' + row.kurs_id)
+                    resolve(row.kurs_id);
                 } else {
                     resolve(null);
                 }
