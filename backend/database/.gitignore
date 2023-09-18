@@ -1,4 +1,3 @@
-# Ignoriere alle Dateien mit der Erweiterung .log
 *.log
 *.env
 *.sqbpro
