@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataSharingService {
 
-  constructor() { }
+  constructor(private sessionStorage: SessionStorageService) { }
 
   private user: User = {
-    userId: '',
+    userId: 0,
     userRole: '',
     name: ''
   };
@@ -21,7 +22,7 @@ export class DataSharingService {
     return this.user;
   }
 
-  getUserId(): string {
+  getUserId(): number {
     return this.user.userId;
   }
 }
