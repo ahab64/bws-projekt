@@ -105,7 +105,20 @@ async function getKurseUser(userId) {
 
     if (!kurse || kurse.length === 0) {
       console.log('Keine Kurse gefunden für userId:', userId);
-      throw new Error('Keine Kurse gefunden');
+      return []; // Wenn kein Kurs gefunden wird, gib ein leeres Array zurück
+    }
+
+    // Überprüfe, ob es Kurse ohne Klausurtermine gibt
+    const kurseMitKlausurtermine = kurse.filter(kurs => kurs.date_start || kurs.date_ende);
+
+    if (kurseMitKlausurtermine.length === 0) {
+      // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
+      return kurse.map(kurs => ({
+        kursname: kurs.kursname,
+        kurslehrer: kurs.kurslehrer,
+        date_start: '',
+        date_ende: ''
+      }));
     }
 
     return kurse;
@@ -116,6 +129,7 @@ async function getKurseUser(userId) {
     closeDatabaseConnection(db);
   }
 }
+
 
 
 
