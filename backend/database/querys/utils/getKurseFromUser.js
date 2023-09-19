@@ -6,7 +6,7 @@ async function getKurseFromUser(userId, db) {
       kt.date_ende
     FROM Kurse AS k
     INNER JOIN "Kurs.User" AS ku ON k.kurs_id = ku.kurs_id
-    INNER JOIN Klausurtermine AS kt ON k.kurs_id = kt.kurs_id
+    LEFT JOIN Klausurtermine AS kt ON k.kurs_id = kt.kurs_id
     WHERE ku.user_id = ?`;
 
   return new Promise((resolve, reject) => {
@@ -21,11 +21,11 @@ async function getKurseFromUser(userId, db) {
           return {
             kursname,
             kurslehrer,
-            date_start: row.date_start,
-            date_ende: row.date_ende
+            date_start: row.date_start || '',
+            date_ende: row.date_ende || ''
           };
         });
-        console.log('Kurse mit Klausurterminen abgerufen:', kursDates);
+        console.log('Kurse abgerufen:', kursDates);
         resolve(kursDates);
       }
     });
