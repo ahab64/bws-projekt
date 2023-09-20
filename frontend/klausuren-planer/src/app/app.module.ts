@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { SessionStorageService } from 'ngx-webstorage'; 
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     ReactiveFormsModule,
     FullCalendarModule
   ],
-  providers: [],
+  providers: [SessionStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

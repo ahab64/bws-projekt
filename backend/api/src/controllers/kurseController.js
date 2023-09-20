@@ -4,7 +4,7 @@ async function handleKursFromUser(req, res) {
   const { userId } = req.body;
 
   try {
-    const kursInfos= await getKurseUser(userId); 
+    const kursInfos = await getKurseUser(userId);
 
 
     res.status(200).json(kursInfos);
