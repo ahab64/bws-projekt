@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
         this.user.name = response.name;
         this.user.userRole = response.rolle;
         this.user.userId = response.userid;
-        this.dataSharingService.setUser(this.user);
+        this.dataSharingService.storeUser(this.user.userId, this.user.userRole, this.user.name);
         this.router.navigate(['/dashboard']);
       });
   }
