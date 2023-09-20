@@ -4,7 +4,7 @@ import { DataSharingService } from './data-sharing.service';
 import { catchError, map } from 'rxjs/operators';
 import { KlausurEvent } from '../models/event.model';
 import { EventInput } from 'fullcalendar';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,41 +18,35 @@ export class CalendarService {
   private getCalendarInformation(userId: number): Observable<KlausurEvent[]> {
     const url = 'http://localhost:3001/api/kursfromuser';
     const data = { userId: userId };
-    return this.http.post<any>(url, data);
+    return this.http.post<KlausurEvent[]>(url, data).pipe(
+      catchError((error) => {
+        throw error;
+      })
+    );
   }
-  
-  loadEvents(): Promise<EventInput[]> {
-    return new Promise<EventInput[]>((resolve, reject) => {
-      this.getCalendarInformation(this.dataSharingService.getUserId())
-        .pipe(
-          catchError((error) => {
-            reject(error); // Wenn ein Fehler auftritt, reject die Promise
-            return [];
-          }),
-          map((eventData) => this.transformEventData(eventData))
-        )
-        .subscribe((events) => {
-          resolve(events); // Resolve die Promise mit den Ereignissen
-        });
-    });
+
+  async loadEvents(): Promise<EventInput[]> {
+    try {
+      const userId = this.dataSharingService.getUserId();
+      const $eventData = await lastValueFrom(
+        this.getCalendarInformation(userId)
+      );
+      return this.transformEventData($eventData);
+    } catch (error) {
+      throw error;
+    }
   }
 
   private transformEventData(
     eventData: KlausurEvent[] | undefined
   ): EventInput[] {
     if (!eventData) {
-      return []; // Wenn eventData undefined ist, gib ein leeres Array zurück
+      return [];
     }
-
-    const arrayOfEvents: EventInput[] = [];
-    eventData.forEach((event) => {
-      const tmpEvent: EventInput = {
-        title: event.kursname + ' bei ' + event.kurslehrer,
-        start: event.date_start,
-        end: event.date_ende,
-      };
-      arrayOfEvents.push(tmpEvent);
-    });
-    return arrayOfEvents;
+    return eventData.map((event) => ({
+      title: `${event.kursname} bei ${event.kurslehrer}`,
+      start: event.date_start,
+      end: event.date_ende,
+    }));
   }
 }

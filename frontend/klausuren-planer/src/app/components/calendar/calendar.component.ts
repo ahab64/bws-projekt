@@ -22,6 +22,15 @@ import { KlausurEvent } from 'src/app/models/event.model';
 })
 export class CalendarComponent implements OnInit {
 
+  calendarOptions: CalendarOptions = {
+    plugins: [
+      dayGridPlugin,
+      timeGridPlugin,
+    ],
+    initialView: 'timeGridWeek',
+    events: []
+  };
+
   events: EventInput[] = []; 
   constructor(private calendarService: CalendarService) {}
 
@@ -31,20 +40,10 @@ export class CalendarComponent implements OnInit {
 
   async loadCalendarEvents() {
     try {
-      this.events = await this.calendarService.loadEvents();
-      this.calendarOptions.events = this.events;
-      
+      this.calendarOptions.events = await this.calendarService.loadEvents(); 
     } catch (error) {
-      // Handle error, wenn ein Fehler auftritt
+      
     }
   }
 
-  calendarOptions: CalendarOptions = {
-    plugins: [
-      dayGridPlugin,
-      timeGridPlugin,
-    ],
-    initialView: 'timeGridWeek',
-    events: []
-  };
 }
