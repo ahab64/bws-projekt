@@ -9,6 +9,7 @@ const { getUsersInKurs } = require('./utils/getUsersInKurs');
 const { updateStatus } = require('./utils/updateUserStatus');
 const { getKurseFromUser } = require('./utils/getKurseFromUser');
 const { getKurseLevel } = require('./utils/getKurseLevel');
+const { insertKlausurTermin } = require('./utils/insertKlausurTermin');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
@@ -151,4 +152,22 @@ async function getKurseFromStufe(stufe) {
   }
 }
 
-module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe };
+async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
+   db = openDatabase(); 
+
+  try {
+
+    const eintrag = await insertKlausurTermin(kursId, dateStart, dateEnd, db)
+  
+    return eintrag; 
+  } catch (error) {
+    console.error('Fehler beim Eintragen:', error);
+
+    return null;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin};
