@@ -8,6 +8,7 @@ let db;
 const { getUsersInKurs } = require('./utils/getUsersInKurs');
 const { updateStatus } = require('./utils/updateUserStatus');
 const { getKurseFromUser } = require('./utils/getKurseFromUser');
+const { getKurseLevel } = require('./utils/getKurseLevel');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
@@ -130,8 +131,24 @@ async function getKurseUser(userId) {
   }
 }
 
+async function getKurseFromStufe(stufe) {
+  try {
+    db = openDatabase();
 
+    const kurse = await getKurseLevel(stufe, db);
 
+    if (!kurse || kurse.length === 0) {
+      console.log('Keine Kurse gefunden für Stufe:', stufe);
+      throw new Error('Keine Kurse gefunden');
+    }
 
+    return kurse;
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Kurse:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
 
-module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser };
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe };
