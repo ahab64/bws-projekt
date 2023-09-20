@@ -5,7 +5,7 @@ const { handleNewUser } = require('../controllers/registrationController');
 const { handleEmailFromKurs } = require('../controllers/emailController');
 const { handleUserApproval } = require('../controllers/userController');
 const { handleKursFromUser } = require('../controllers/kurseController');
-
+const { handleKursFromLevel } = require('../controllers/levelController');
 
 router.get('/api/id/:email', handleGetUser);
 router.post('/api/login', handleLogin);
@@ -13,7 +13,10 @@ router.post('/api/registration', handleNewUser);
 router.post('/api/kursemail', handleEmailFromKurs);
 router.post('/api/admin/user-approval', handleUserApproval);
 router.post('/api/kursfromuser', handleKursFromUser);
+router.post('/api/kursefromlevel', handleKursFromLevel);
 
+//Eintragen für Klausurtermine mit kursId oder kursname datum
+//Wenn ich stufe eingebe z.B. 10, sollen alle Kurse angezeigt werden
 //To Do: Endpunkte für...
 //EMails einer Klasse
 //Email eines Kurslehrers
