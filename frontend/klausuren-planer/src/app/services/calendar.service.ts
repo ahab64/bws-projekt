@@ -10,6 +10,8 @@ import { Observable, lastValueFrom, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class CalendarService {
+
+  
   constructor(
     private http: HttpClient,
     private dataSharingService: DataSharingService
@@ -28,6 +30,7 @@ export class CalendarService {
   async loadEvents(): Promise<EventInput[]> {
     try {
       const userId = this.dataSharingService.getUserId();
+      if(this.dataSharingService.getUserId !== null){}
       const $eventData = await lastValueFrom(
         this.getCalendarInformation(userId)
       );
