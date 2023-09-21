@@ -1,0 +1,24 @@
+<div>
+  <input type="file" (change)="onFileSelected($event)" accept=".csv" />
+</div>
+
+<table *ngIf="csvData.length > 0">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Kurse</th>
+      <th>Rolle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of csvData">
+      <td>{{ row.Name }}</td>
+      <td>{{ row.Email }}</td>
+      <td>{{ row.Password }}</td>
+      <td>{{ row.Kurse }}</td>
+      <td>{{ row.Rolle }}</td>
+    </tr>
+  </tbody>
+</table>

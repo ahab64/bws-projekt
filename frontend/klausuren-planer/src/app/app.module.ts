@@ -13,6 +13,7 @@ import { HttpClientModule } from  '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CsvUploadComponent } from './csv-upload/csv-upload.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     StudentComponent,
     CalendarComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    CsvUploadComponent
   ],
   imports: [
     BrowserModule,
