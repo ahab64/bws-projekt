@@ -9,7 +9,7 @@ import { AuthService } from './services/auth.service';
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: '', redirectTo: 'login', pathMatch: "full"},
-  { path: 'csv', component: CsvUploadComponent }
+  { path: 'csv', component: CsvUploadComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthService]},
   { path: 'registration', component: RegistrationComponent}
 ];
