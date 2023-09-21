@@ -1,4 +1,4 @@
-const { openDatabase, closeDatabaseConnection } = require('../databaseConnection'); 
+const { openDatabase, closeDatabaseConnection } = require('../databaseConnection');
 const { getUserId } = require('./utils/getUserId');
 const { insertIntoPassword } = require('./utils/insertIntoPassword');
 const { insertIntoUser } = require('./utils/insertIntoUser');
@@ -7,6 +7,9 @@ const { insertIntoKursUser } = require('./utils/insertIntoKursUser');
 let db;
 const { getUsersInKurs } = require('./utils/getUsersInKurs');
 const { updateStatus } = require('./utils/updateUserStatus');
+const { getKurseFromUser } = require('./utils/getKurseFromUser');
+const { getKurseLevel } = require('./utils/getKurseLevel');
+const { insertKlausurTermin } = require('./utils/insertKlausurTermin');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
@@ -80,20 +83,91 @@ async function newUser(name, email, password, kurse, rolle) {
     // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
-    closeDatabaseConnection(db); 
+    closeDatabaseConnection(db);
   }
 }
 
 async function updateUserStatus(userId, newStatus) {
-  try{
+  try {
     db = openDatabase();
-    await updateStatus (db, userId, newStatus);
-  } catch(error) {
+    await updateStatus(db, userId, newStatus);
+  } catch (error) {
     throw error;
   } finally {
-    closeDatabaseConnection(db); 
-  } 
+    closeDatabaseConnection(db);
+  }
 }
 
 
-module.exports = { getUser, newUser , getEmailsInKurs, updateUserStatus};
+async function getKurseUser(userId) {
+  try {
+    db = openDatabase();
+
+    const kurse = await getKurseFromUser(userId, db);
+
+    if (!kurse || kurse.length === 0) {
+      console.log('Keine Kurse gefunden für userId:', userId);
+      return []; // Wenn kein Kurs gefunden wird, gib ein leeres Array zurück
+    }
+
+    // Überprüfe, ob es Kurse ohne Klausurtermine gibt
+    const kurseMitKlausurtermine = kurse.filter(kurs => kurs.date_start || kurs.date_ende);
+
+    if (kurseMitKlausurtermine.length === 0) {
+      // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
+      return kurse.map(kurs => ({
+        kursname: kurs.kursname,
+        kurslehrer: kurs.kurslehrer,
+        date_start: '',
+        date_ende: ''
+      }));
+    }
+
+    return kurse;
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Kurse:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+async function getKurseFromStufe(stufe) {
+  try {
+    db = openDatabase();
+
+    const kurse = await getKurseLevel(stufe, db);
+
+    if (!kurse || kurse.length === 0) {
+      console.log('Keine Kurse gefunden für Stufe:', stufe);
+      throw new Error('Keine Kurse gefunden');
+    }
+
+    return kurse;
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Kurse:', error);
+    throw error;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
+   db = openDatabase(); 
+
+  try {
+
+    const eintrag = await insertKlausurTermin(kursId, dateStart, dateEnd, db)
+  
+    return eintrag; 
+  } catch (error) {
+    console.error('Fehler beim Eintragen:', error);
+
+    return null;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin};

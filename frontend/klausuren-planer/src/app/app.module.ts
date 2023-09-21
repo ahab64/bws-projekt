@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CsvUploadComponent } from './csv-upload/csv-upload.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -32,9 +34,10 @@ import { CsvUploadComponent } from './csv-upload/csv-upload.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FullCalendarModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

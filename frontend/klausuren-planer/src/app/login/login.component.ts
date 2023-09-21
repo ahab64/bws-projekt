@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   password: string = '';
   private user: User = {
     name: '',
-    userId: '',
+    userId: 0,
     userRole: '',
   };
 
@@ -45,15 +45,14 @@ export class LoginComponent implements OnInit {
         catchError((error) => {
           this.loginFailed = true;
           console.error('Fehler bei der Anmeldung:', error);
-          // Wir geben ein neues Observable zurück, das einen leeren Fehler zurückgibt
           return throwError(() => error);
         })
       )
       .subscribe((response) => {
         this.user.name = response.name;
-        this.user.userRole = response.userRole;
-        this.user.userId = response.userId;
-        this.dataSharingService.setUser(this.user);
+        this.user.userRole = response.rolle;
+        this.user.userId = response.userid;
+        this.dataSharingService.storeUser(this.user.userId, this.user.userRole, this.user.name);
         this.router.navigate(['/dashboard']);
       });
   }
