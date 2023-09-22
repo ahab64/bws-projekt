@@ -15,6 +15,10 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { ReactiveFormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AuthService } from './services/auth.service';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +29,7 @@ import { AuthService } from './services/auth.service';
     StudentComponent,
     CalendarComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,10 @@ import { AuthService } from './services/auth.service';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    BsDatepickerModule.forRoot(),
+    BrowserAnimationsModule,
+    TimepickerModule.forRoot(),
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
