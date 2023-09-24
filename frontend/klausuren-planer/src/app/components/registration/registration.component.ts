@@ -9,8 +9,9 @@ import { UserExtended } from 'src/app/models/userExtended.model';
 import { Kurs } from 'src/app/models/kurs.model';
 import { UserRolle } from 'src/app/enums/userRollen.enum';
 import { RegistrationService } from 'src/app/services/registration.service';
-import { catchError, throwError } from 'rxjs';
+import { catchError, lastValueFrom, throwError } from 'rxjs';
 import { TextContentService } from 'src/app/services/text-content.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -18,21 +19,9 @@ import { TextContentService } from 'src/app/services/text-content.service';
   styleUrls: ['./registration.component.css'],
 })
 export class RegistrationComponent implements OnInit {
-  klassenstufen = ['10', '11', '12', '13']; // Hier können Sie die verfügbaren Klassenstufen hinzufügen/ändern
+  klassenstufen = ['10', '11', '12', '13']; 
   kursliste: Kurs[] = [
-    { name: '10_OS_Mathe_Gg', lehrer: 'Peter Grüning' },
-    { name: '10_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
-    { name: '11_OS_Mathe_Si', lehrer: 'Max Mustermann' },
-    { name: '11_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
-    { name: '10_OS_Mathe_Gg', lehrer: 'Peter Grüning' },
-    { name: '10_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
-    { name: '11_OS_Mathe_Si', lehrer: 'Max Mustermann' },
-    { name: '11_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
-    { name: '10_OS_Mathe_Gg', lehrer: 'Peter Grüning' },
-    { name: '10_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
-    { name: '11_OS_Mathe_Si', lehrer: 'Max Mustermann' },
-    { name: '11_OS_Deutsch_Ki', lehrer: 'Max Mustermann' },
-  ]; // Hier können Sie die verfügbaren Kurse hinzufügen/ändern
+  ]; 
 
   user: UserExtended = {
     name: '',
@@ -44,11 +33,13 @@ export class RegistrationComponent implements OnInit {
   registrationFailed: boolean = false;
   isRegistered: boolean = false;
   isInValid: boolean = false;
+  loadingKurseFailed: boolean = false;
   textInhalte: any;
 
   registrationForm: FormGroup;
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private registrationService: RegistrationService,
     private textContentService: TextContentService
@@ -66,8 +57,21 @@ export class RegistrationComponent implements OnInit {
   ngOnInit() {
     this.textContentService.getTextContents().subscribe((data) => {
       this.textInhalte = data;
-      console.log(this.textInhalte);
     });
+  }
+
+  async onChangeStufe(): Promise<Kurs[]> {
+    try {
+      const stufe = this.registrationForm.get('klasse')?.value;
+      const $kurse = await lastValueFrom(
+        this.registrationService.getKurse(stufe),
+      );
+      this.kursliste = $kurse;
+      return $kurse;
+    } catch (error) {
+      this.loadingKurseFailed = true;
+      return [];
+    }
   }
 
   onChangeKursliste(event: any, kurs: Kurs) {
@@ -77,7 +81,7 @@ export class RegistrationComponent implements OnInit {
     } else {
       // Remove the course from the user's selected courses
       const index = this.user.kurse.findIndex(
-        (selected: Kurs) => selected.name === kurs.name
+        (selected: Kurs) => selected === kurs
       );
       if (index !== -1) {
         this.user.kurse.splice(index, 1);
@@ -121,8 +125,12 @@ export class RegistrationComponent implements OnInit {
           console.log(response);
         });
     } else {
-      console.log('Invalid Form')
+      console.log('Invalid Form');
       this.isInValid = true;
     }
+  }
+
+  onAnmelden(){
+    this.router.navigate(['/'])
   }
 }

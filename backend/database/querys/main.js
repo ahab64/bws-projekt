@@ -116,6 +116,7 @@ async function getKurseUser(userId) {
     if (kurseMitKlausurtermine.length === 0) {
       // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
       return kurse.map(kurs => ({
+        id: kurs.id,
         kursname: kurs.kursname,
         kurslehrer: kurs.kurslehrer,
         date_start: '',
