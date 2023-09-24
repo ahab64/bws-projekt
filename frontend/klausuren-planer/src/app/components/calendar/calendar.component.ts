@@ -12,8 +12,8 @@ import { DataSharingService } from 'src/app/services/data-sharing.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
-import { Calendar } from '@fullcalendar/core';
 import { defineLocale } from 'ngx-bootstrap/chronos';
+import { UserRolle } from 'src/app/enums/userRollen.enum';
 
 @Component({
   selector: 'app-calendar',
@@ -23,6 +23,7 @@ import { defineLocale } from 'ngx-bootstrap/chronos';
 export class CalendarComponent implements OnInit {
   failedLoadingEvents: boolean = false;
   isAddEventPopupOpen: boolean = false;
+  canEdit: boolean = false;
   user: User;
   rawEvents: KlausurEvent[] = [];
   calendarForm: FormGroup;
@@ -57,8 +58,10 @@ export class CalendarComponent implements OnInit {
     private fb: FormBuilder,
     private localeService: BsLocaleService
   ) {
-    this.user = this.dataSharingService.getUser();
     defineLocale('de', _deLocale);
+    this.user = this.dataSharingService.getUser();
+    this.canEdit = this.user.userRole !== UserRolle.Student;
+    console.log(this.canEdit);
     this.localeService.use(this.locale);
     this.calendarForm = this.fb.group({
       selectedKursEvent: new FormControl('', Validators.required),

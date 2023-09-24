@@ -13,7 +13,7 @@
           </li>
         </ul>
       </div>
-      <div class="sidebar-section">
+      <div *ngIf="canEdit" class="sidebar-section">
         <button (click)="openEventPopup()">Klausur planen</button>
       </div>
     </div>
