@@ -23,26 +23,27 @@
     </div>
     <div class="form-group">
       <label for="classLevel">{{textInhalte.registration.klassenstufe}}</label>
-      <select id="classLevel" formControlName="klasse" class="select-field">
+      <select id="classLevel" formControlName="klasse" class="select-field" (change)="onChangeStufe()">
+        <option value="" disabled selected>Eine Klassenstufe wählen</option>
         <option *ngFor="let stufe of klassenstufen">{{ stufe }}</option>
-        <!-- Fügen Sie hier weitere Klassenstufen hinzu, falls erforderlich -->
       </select>
-    </div>
+    </div>    
     <div *ngIf="registrationForm.get('klasse')?.value" class="form-group">
       <label for="kurse">{{textInhalte.registration.kursliste}}</label>
       <div class="course-list course-list-container">
         <ul class="checkbox-list scrollable-list">
           <li *ngFor="let kurs of kursliste; let i = index">
             <label class="checkbox-label">
-              <input type="checkbox" [id]="kurs.name" formControlName="kurse" [value]="kurs"
-                (change)="onChangeKursliste($event, kurs)">
-              {{ kurs.name + " mit " + kurs.lehrer }}
+              <input type="checkbox" [id]="kurs" formControlName="kurse" [value]="kurs"
+                (change)="onChangeKursliste($event,kurs)">
+              {{ kurs}}
             </label>
           </li>
         </ul>
       </div>
     </div>   
     <button [class.button-inValid-Form]="!this.registrationForm.valid">Registrieren</button>
+    <button class="button-spacing" (click)="onAnmelden()">Anmelden</button>
   </form>
   <div *ngIf="registrationFailed" class="error-message">{{textInhalte.registration.errors.failed}}</div>
   <div *ngIf="isRegistered" class="error-message">{{textInhalte.registration.errors.registed}}</div>

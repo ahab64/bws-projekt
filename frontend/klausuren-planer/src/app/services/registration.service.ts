@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserExtended } from '../models/userExtended.model';
+import { Observable, catchError } from 'rxjs';
+import { Kurs } from '../models/kurs.model';
+import { error } from 'jquery';
+import { er } from '@fullcalendar/core/internal-common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +15,25 @@ export class RegistrationService {
 
   registration(user: UserExtended) {
     const url = 'http://localhost:3001/api/registration';
-    const kurseNamen: string[] = [];
-    user.kurse.forEach(kurs => {
-      kurseNamen.push(kurs.name)
-    }); 
     const data = {
       name: user.name,
       email: user.email,
       password: user.password,
-      kurse: kurseNamen,
+      kurse: user.kurse,
       rolle: user.rolle
     };
     return this.http.post(url, data);
+  }
+
+  getKurse(stufe: string): Observable<Kurs[]> {
+    const url = 'http://localhost:3001/api/kursefromlevel';
+    const data = {
+      "stufe": stufe
+    }
+    return this.http.post<Kurs[]>(url, data).pipe(
+      catchError(
+        (error) =>  {throw error;}
+      )
+    )
   }
 }
