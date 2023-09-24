@@ -17,7 +17,7 @@ export class CalendarService {
     private dataSharingService: DataSharingService
   ) {}
 
-  private getCalendarInformation(userId: number): Observable<KlausurEvent[]> {
+  getCalendarInformation(userId: number): Observable<KlausurEvent[]> {
     const url = 'http://localhost:3001/api/kursfromuser';
     const data = { userId: userId };
     return this.http.post<KlausurEvent[]>(url, data).pipe(
@@ -27,14 +27,17 @@ export class CalendarService {
     );
   }
 
-  async loadEvents(): Promise<EventInput[]> {
+  async loadEvents(): Promise<{transformed: EventInput[], raw: KlausurEvent[] }> {
     try {
       const userId = this.dataSharingService.getUserId();
       if(this.dataSharingService.getUserId !== null){}
       const $eventData = await lastValueFrom(
         this.getCalendarInformation(userId)
       );
-      return this.transformEventData($eventData);
+      return {
+        transformed: this.transformEventData($eventData),
+        raw: $eventData
+      };
     } catch (error) {
       throw error;
     }

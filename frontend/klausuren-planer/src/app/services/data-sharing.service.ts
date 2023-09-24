@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { User } from '../models/user.model';
+import { Kurs } from '../models/kurs.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,4 +36,27 @@ export class DataSharingService {
       return parseInt(userId);
     }
   }
-}
+
+  getUser(): User {
+    const _userId = sessionStorage.getItem('UserId');
+    const _userName = sessionStorage.getItem('UserName'); 
+    const _userRole = sessionStorage.getItem('UserRole');
+
+    if(_userId !== null && _userName !== null && _userRole !== null){
+      const user: User = { 
+        userId: parseInt(_userId),
+        name: _userName,
+        userRole: _userRole 
+      }
+      return user
+    } else {
+      const user: User = {
+        userId: 0,
+        name: '',
+        userRole: '',
+      }
+      return user;
+      }
+    }
+
+  }
