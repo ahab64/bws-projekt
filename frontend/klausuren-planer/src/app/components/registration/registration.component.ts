@@ -103,14 +103,6 @@ export class RegistrationComponent implements OnInit {
       this.user.kurse;
       this.user.rolle = rolle;
 
-      console.log(
-        this.user.name,
-        this.user.email,
-        this.user.password,
-        this.user.kurse,
-        this.user.rolle
-      );
-
       this.registrationService
         .registration(this.user)
         .pipe(
@@ -122,10 +114,8 @@ export class RegistrationComponent implements OnInit {
         )
         .subscribe((response) => {
           this.isRegistered = true;
-          console.log(response);
         });
     } else {
-      console.log('Invalid Form');
       this.isInValid = true;
     }
   }

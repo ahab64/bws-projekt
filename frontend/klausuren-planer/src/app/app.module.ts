@@ -9,7 +9,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { StudentComponent } from './components/student/student.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from  '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from  '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,8 @@ import { AuthService } from './services/auth.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { JwtModule } from '@auth0/angular-jwt';
+import { AuthInterceptor } from './services/auth-interceptor.interceptor';
 
 
 @NgModule({
@@ -32,6 +34,13 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
     RegistrationComponent,
   ],
   imports: [
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => {
+          return localStorage.getItem('jwtToken'); // Hier sollte deine Methode zum Abrufen des Tokens stehen
+        },
+      },
+    }),  
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -42,7 +51,12 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
     BrowserAnimationsModule,
     TimepickerModule.forRoot(),
   ],
-  providers: [AuthService],
+  providers: [AuthService, 
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

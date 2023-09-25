@@ -16,7 +16,6 @@ async function utilInsertKursUser(userId, kursId, db) {
 }
 
 async function insertIntoKursUser(db, userID, kurse) {
-    console.log(kurse + "hshdhshd");
     try {
         for (let kurs of kurse) {
             const kursId = await getKursId(kurs, db);

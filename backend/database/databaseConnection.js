@@ -1,6 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-require('dotenv').config();
-const dbUrl = "/Users/merlinburbach/Public/bws-projekt/backend/database/datenbank.db";
+const dbUrl = process.env.DB_URL;
 
 function openDatabase() {
   return new sqlite3.Database(dbUrl, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {

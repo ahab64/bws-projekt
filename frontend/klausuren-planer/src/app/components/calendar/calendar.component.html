@@ -59,12 +59,12 @@
         <br />
         <div>
           <label for="startTime">Start der Klausur:</label>
-          <timepicker formControlName="startTime" onchange="setMinTime()" [showMeridian]="false"></timepicker>
+          <timepicker formControlName="startTime" [showMeridian]="false"></timepicker>
         </div>
         <br />
         <div>
           <label for="endTime">Ende der Klausur:</label>
-          <timepicker formControlName="endTime" [showMeridian]="false" onchange="setMinTime()" ></timepicker>
+          <timepicker formControlName="endTime" [showMeridian]="false"></timepicker>
         </div>
         <button (click)="addNewEvent()">Eintragen</button>
         <button (click)="closeEventPopup()">Verwerfen</button>
