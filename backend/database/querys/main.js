@@ -10,6 +10,8 @@ const { updateStatus } = require('./utils/updateUserStatus');
 const { getKurseFromUser } = require('./utils/getKurseFromUser');
 const { getKurseLevel } = require('./utils/getKurseLevel');
 const { insertKlausurTermin } = require('./utils/insertKlausurTermin');
+const { updateKlausurtermin } = require('./utils/updateKlausur');
+const { deleteKlausurtermin } = require('./utils/deleteKlausur');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
@@ -154,13 +156,13 @@ async function getKurseFromStufe(stufe) {
 }
 
 async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
-   db = openDatabase(); 
+  db = openDatabase();
 
   try {
 
     const eintrag = await insertKlausurTermin(kursId, dateStart, dateEnd, db)
-  
-    return eintrag; 
+
+    return eintrag;
   } catch (error) {
     console.error('Fehler beim Eintragen:', error);
 
@@ -170,5 +172,37 @@ async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   }
 }
 
+async function updateKlausurTermin(kursId, dateStart, dateEnd, db) {
+  db = openDatabase();
 
-module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin};
+  try {
+
+    const update = await updateKlausurtermin(db, kursId, dateStart, dateEnd)
+    return update;
+  } catch (error) {
+    console.error('Fehler beim Updaten:', error);
+
+    return null;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+async function deleteKlausurTermin(kursId, db) {
+  db = openDatabase();
+
+  try {
+    const del = await deleteKlausurtermin(db, kursId)
+    return del;
+  } catch (error) {
+    console.error('Fehler beim Löschen:', error);
+
+    return null;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+
+
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin, updateKlausurTermin, deleteKlausurTermin};
