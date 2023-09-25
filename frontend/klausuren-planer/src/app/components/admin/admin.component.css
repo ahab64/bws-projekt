@@ -1,0 +1,103 @@
+/* Base styles for form elements */
+.input-field,
+.select-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+/* Button styles */
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.button-inValid-Form {
+  background-color: rgb(175, 186, 229);
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Error message styles */
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Container styles */
+.admin-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Section header styles */
+.admin-section-header {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* CSV import section styles */
+.csv-import-section {
+  margin-bottom: 20px;
+}
+
+/* Form control styles within CSV import section */
+.csv-import-section input[type="file"] {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Button styles within CSV import section */
+.csv-import-section button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.csv-import-section button:hover {
+  background-color: #0056b3;
+}
+
+/* Pending users section styles */
+.pending-users-section {
+  margin-bottom: 20px;
+}
+
+/* Scrollable list styles */
+.scrollable-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+/* Approve button styles */
+.pending-users-section button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.pending-users-section button:hover {
+  background-color: #0056b3;
+}

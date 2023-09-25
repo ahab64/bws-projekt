@@ -16,6 +16,12 @@ export class DataSharingService {
     this.setUserName(userName);
   }
 
+  removeUser(){
+    sessionStorage.removeItem('UserId');
+    sessionStorage.removeItem('UserRole');
+    sessionStorage.removeItem('UserName');
+  }
+
   private setUserId(userId: number){
     sessionStorage.setItem('UserId', userId.toString());
   }
