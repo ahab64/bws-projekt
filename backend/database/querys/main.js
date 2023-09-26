@@ -17,15 +17,16 @@ const { deleteKlausurtermin } = require('./utils/deleteKlausur');
 async function getEmailsInKurs(kursName, callback) {
   db = openDatabase();
   try {
-    const emails = await getUsersInKurs(kursName, db);
-    callback(null, emails);
+    const emailsUndRollen = await getUsersInKurs(kursName, db, true);
+    callback(null, emailsUndRollen);
   } catch (error) {
-    console.error('Fehler beim Abrufen der E-Mails im Kurs:', error);
+    console.error('Fehler beim Abrufen der E-Mails/Rollen im Kurs:', error);
     callback(error, null);
   } finally {
     closeDatabaseConnection(db);
   }
 }
+
 
 //To do: refactor so logic is seperated in getUserFile
 function getUser(email, callback) {
