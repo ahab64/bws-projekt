@@ -10,6 +10,7 @@ const { handleKursFromLevel } = require('../controllers/levelController');
 const { handleNewKlausurTermin } = require('../controllers/klausurController');
 const { handleDeleteTermin } = require('../controllers/klausurController');
 const { handleUpdateKlausurtermin } = require('../controllers/klausurController');
+const sendMailController = require('../controllers/sendMailController');
 
 router.get('/api/id/:email', auth, handleGetUser);
 router.post('/api/login', handleLogin);
@@ -21,10 +22,7 @@ router.post('/api/kursefromlevel', auth, handleKursFromLevel);
 router.post('/api/klausureintrag', auth, handleNewKlausurTermin);
 router.post('/api/deleteTermin', handleDeleteTermin);
 router.post('/api/updateTermin', handleUpdateKlausurtermin);
-//To Do: Endpunkte für...
-//EMails einer Klasse
-//Email eines Kurslehrers
-//Kurse pro User
-//Eintragung eins Klausurtermin (post)
+router.post('/api/send-email', auth, sendMailController.sendEmail);
+
 
 module.exports = router;
