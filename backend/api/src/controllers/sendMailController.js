@@ -14,11 +14,11 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmail = async (req, res) => {
-  const { emailBody, emailSubject } = req.body;
+  const { emailBody, emailSubject } = req.body; 
 
   const mailOptions = {
     from: "reacttest@outlook.de",
-    to: req.body.to,
+    bcc:  req.body.bcc,
     subject: emailSubject,
     text: emailBody,
   };
