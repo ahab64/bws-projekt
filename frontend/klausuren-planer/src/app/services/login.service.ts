@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import * as moment from 'moment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({

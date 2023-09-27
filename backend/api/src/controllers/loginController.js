@@ -5,7 +5,6 @@ var bcrypt = require('bcryptjs');
 function handleGetUser(req, res) {
     const email = req.params.email;
     const papa = "yarak";
-    const mama = "schwanz";
     res.json({ papa }); // Return the ID in a JSON response
     getUser(email, (err, result) => {
         if (err) {
@@ -35,7 +34,6 @@ function handleLogin(req, res) {
             } else {
                 res.json((getUserResponse(result)))
             }
-
         }
     });
 }

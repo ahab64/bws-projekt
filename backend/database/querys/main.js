@@ -1,17 +1,22 @@
-const { openDatabase, closeDatabaseConnection } = require('../databaseConnection');
-const { getUserId } = require('./utils/getUserId');
-const { insertIntoPassword } = require('./utils/insertIntoPassword');
-const { insertIntoUser } = require('./utils/insertIntoUser');
-const { getKursIDs } = require('./utils/getKursId');
-const { insertIntoKursUser } = require('./utils/insertIntoKursUser');
+const {
+  openDatabase,
+  closeDatabaseConnection,
+} = require("../databaseConnection");
+const { getUserId } = require("./utils/getUserId");
+const { insertIntoPassword } = require("./utils/insertIntoPassword");
+const { insertIntoUser } = require("./utils/insertIntoUser");
+const { getKursIDs } = require("./utils/getKursId");
+const { insertIntoKursUser } = require("./utils/insertIntoKursUser");
+const { getUsersInKurs } = require("./utils/getUsersInKurs");
+const { updateStatus } = require("./utils/updateUserStatus");
+const { getKurseFromUser } = require("./utils/getKurseFromUser");
+const { getKurseLevel } = require("./utils/getKurseLevel");
+const { allPendingUsers } = require("./utils/getPendingUser");
+const { insertKlausurTermin } = require("./utils/insertKlausurTermin");
+const { updateKlausurtermin } = require("./utils/updateKlausur");
+const { deleteKlausurtermin } = require("./utils/deleteKlausur");
+
 let db;
-const { getUsersInKurs } = require('./utils/getUsersInKurs');
-const { updateStatus } = require('./utils/updateUserStatus');
-const { getKurseFromUser } = require('./utils/getKurseFromUser');
-const { getKurseLevel } = require('./utils/getKurseLevel');
-const { insertKlausurTermin } = require('./utils/insertKlausurTermin');
-const { updateKlausurtermin } = require('./utils/updateKlausur');
-const { deleteKlausurtermin } = require('./utils/deleteKlausur');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
@@ -20,7 +25,7 @@ async function getEmailsInKurs(kursName, callback) {
     const emailsUndRollen = await getUsersInKurs(kursName, db, true);
     callback(null, emailsUndRollen);
   } catch (error) {
-    console.error('Fehler beim Abrufen der E-Mails/Rollen im Kurs:', error);
+    console.error('Fehler beim Abrufen der E-Mails im Kurs:', error);
     callback(error, null);
   } finally {
     closeDatabaseConnection(db);
@@ -31,7 +36,7 @@ async function getEmailsInKurs(kursName, callback) {
 //To do: refactor so logic is seperated in getUserFile
 function getUser(email, callback) {
   db = openDatabase();
-  const query = 'SELECT * FROM User WHERE email = ?';
+  const query = "SELECT * FROM User WHERE email = ?";
   db.get(query, [email], (queryErr, userRow) => {
     if (queryErr) {
       console.error(queryErr.message);
@@ -40,13 +45,13 @@ function getUser(email, callback) {
     }
 
     if (!userRow) {
-      console.error('User not found');
-      callback(new Error('User not found'), null);
+      console.error("User not found");
+      callback(new Error("User not found"), null);
       return;
     }
 
     const courseId = userRow.user_id;
-    const secondQuery = 'SELECT * FROM Password WHERE user_id = ?';
+    const secondQuery = "SELECT * FROM Password WHERE user_id = ?";
 
     db.all(secondQuery, [courseId], (secondQueryErr, courseRows) => {
       if (secondQueryErr) {
@@ -65,7 +70,6 @@ function getUser(email, callback) {
     });
   });
   closeDatabaseConnection(this.db);
-
 }
 //TO DO: remove error handling here
 async function newUser(name, email, password, kurse, rolle) {
@@ -81,7 +85,7 @@ async function newUser(name, email, password, kurse, rolle) {
 
     return userId; // Erfolg: Benutzer-ID zurückgeben
   } catch (error) {
-    console.error('Fehler bei der Benutzererstellung:', error);
+    console.error("Fehler bei der Benutzererstellung:", error);
 
     // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
@@ -101,6 +105,17 @@ async function updateUserStatus(userId, newStatus) {
   }
 }
 
+async function getPendingUser() {
+  try {
+    db = openDatabase();
+    const pendingUser = await allPendingUsers(db);
+    return pendingUser;
+  } catch (error) {
+    throw error;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
 
 async function getKurseUser(userId) {
   try {
@@ -109,27 +124,29 @@ async function getKurseUser(userId) {
     const kurse = await getKurseFromUser(userId, db);
 
     if (!kurse || kurse.length === 0) {
-      console.log('Keine Kurse gefunden für userId:', userId);
+      console.log("Keine Kurse gefunden für userId:", userId);
       return []; // Wenn kein Kurs gefunden wird, gib ein leeres Array zurück
     }
 
     // Überprüfe, ob es Kurse ohne Klausurtermine gibt
-    const kurseMitKlausurtermine = kurse.filter(kurs => kurs.date_start || kurs.date_ende);
+    const kurseMitKlausurtermine = kurse.filter(
+      (kurs) => kurs.date_start || kurs.date_ende
+    );
 
     if (kurseMitKlausurtermine.length === 0) {
       // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
-      return kurse.map(kurs => ({
+      return kurse.map((kurs) => ({
         id: kurs.id,
         kursname: kurs.kursname,
         kurslehrer: kurs.kurslehrer,
-        date_start: '',
-        date_ende: ''
+        date_start: "",
+        date_ende: "",
       }));
     }
 
     return kurse;
   } catch (error) {
-    console.error('Fehler beim Abrufen der Kurse:', error);
+    console.error("Fehler beim Abrufen der Kurse:", error);
     throw error;
   } finally {
     closeDatabaseConnection(db);
@@ -143,13 +160,13 @@ async function getKurseFromStufe(stufe) {
     const kurse = await getKurseLevel(stufe, db);
 
     if (!kurse || kurse.length === 0) {
-      console.log('Keine Kurse gefunden für Stufe:', stufe);
-      throw new Error('Keine Kurse gefunden');
+      console.log("Keine Kurse gefunden für Stufe:", stufe);
+      throw new Error("Keine Kurse gefunden");
     }
 
     return kurse;
   } catch (error) {
-    console.error('Fehler beim Abrufen der Kurse:', error);
+    console.error("Fehler beim Abrufen der Kurse:", error);
     throw error;
   } finally {
     closeDatabaseConnection(db);
@@ -160,12 +177,11 @@ async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   db = openDatabase();
 
   try {
-
-    const eintrag = await insertKlausurTermin(kursId, dateStart, dateEnd, db)
+    const eintrag = await insertKlausurTermin(kursId, dateStart, dateEnd, db);
 
     return eintrag;
   } catch (error) {
-    console.error('Fehler beim Eintragen:', error);
+    console.error("Fehler beim Eintragen:", error);
 
     return null;
   } finally {
@@ -179,9 +195,10 @@ async function updateKlausurTermin(klausur_id, dateStart, dateEnd, db) {
   try {
 
     const update = await updateKlausurtermin(db, klausur_id, dateStart, dateEnd)
+    console.log('Update Erfolgt', klausur_id)
     return update;
   } catch (error) {
-    console.error('Fehler beim Updaten:', error);
+    console.error("Fehler beim Updaten:", error);
 
     return null;
   } finally {
@@ -194,9 +211,10 @@ async function deleteKlausurTermin(klausur_id, db) {
 
   try {
     const del = await deleteKlausurtermin(db, klausur_id)
+    console.log("Löschen erfolgt für Klausur", klausur_id);
     return del;
   } catch (error) {
-    console.error('Fehler beim Löschen:', error);
+    console.error("Fehler beim Löschen:", error);
 
     return null;
   } finally {
@@ -204,6 +222,15 @@ async function deleteKlausurTermin(klausur_id, db) {
   }
 }
 
-
-
-module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin, updateKlausurTermin, deleteKlausurTermin};
+module.exports = {
+  getUser,
+  newUser,
+  getEmailsInKurs,
+  updateUserStatus,
+  getKurseUser,
+  getKurseFromStufe,
+  newKlausurtermin,
+  updateKlausurTermin,
+  deleteKlausurTermin,
+  getPendingUser,
+};
