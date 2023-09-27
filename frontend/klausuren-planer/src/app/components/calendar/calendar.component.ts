@@ -21,6 +21,7 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { UserRolle } from 'src/app/enums/userRollen.enum';
 import { lastValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-calendar',
@@ -83,7 +84,8 @@ export class CalendarComponent implements OnInit {
     private calendarService: CalendarService,
     private dataSharingService: DataSharingService,
     private fb: FormBuilder,
-    private localeService: BsLocaleService
+    private localeService: BsLocaleService,
+    private authService: AuthService
   ) {
     defineLocale('de', _deLocale);
     this.user = this.dataSharingService.getUser();
@@ -277,5 +279,8 @@ export class CalendarComponent implements OnInit {
     } else {
       this.isInValid = true;
     }
+    }
+    onLogOut(){
+      this.authService.logout();
     }
 }
