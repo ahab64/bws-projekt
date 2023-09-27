@@ -2,7 +2,7 @@ const { newUser } = require('../../../database/querys/main');
 
 async function handleCsvUser(req, res) {
     try {
-      // Assuming req.body contains the JSON data
+
       const jsonData = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
   
       if (!Array.isArray(jsonData)) {
@@ -13,15 +13,14 @@ async function handleCsvUser(req, res) {
   
       for (const user of jsonData) {
         const { Name, Email, Password, Kurse, Rolle } = user;
+        console.log(Kurse);
   
-        // Assuming newUser returns a promise
-        const newUserPromise = newUser(Name, Password, Email, Rolle);
+        const newUserPromise = newUser(Name, Password, Email, Kurse, Rolle);
         insertPromises.push(newUserPromise);
       }
   
-      await Promise.all(insertPromises); // Wait for all user inserts to complete
+      await Promise.all(insertPromises);  
   
-      console.log("sekerim");
       res.status(201).json({ status: 201, message: 'Users erfolgreich erstellt' });
     } catch (error) {
       console.error('Fehler beim Hinzufügen der Users:', error);
