@@ -7,6 +7,7 @@ const { handleUserApproval } = require('../controllers/userController');
 const { handleKursFromUser } = require('../controllers/kurseController');
 const { handleKursFromLevel } = require('../controllers/levelController');
 const { handleNewKlausurTermin } = require('../controllers/klausurController');
+const { handleCsvUser } = require('../controllers/csvController');
 
 router.get('/api/id/:email', handleGetUser);
 router.post('/api/login', handleLogin);
@@ -16,6 +17,7 @@ router.post('/api/admin/user-approval', handleUserApproval);
 router.post('/api/kursfromuser', handleKursFromUser);
 router.post('/api/kursefromlevel', handleKursFromLevel);
 router.post('/api/klausureintrag', handleNewKlausurTermin);
+router.post('/api/csv', handleCsvUser);
 
 //Eintragen für Klausurtermine mit kursId oder kursname datum
 //To Do: Endpunkte für...
