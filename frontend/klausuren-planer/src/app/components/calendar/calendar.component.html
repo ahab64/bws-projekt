@@ -6,7 +6,9 @@
       </div>
       <div class="sidebar-section">
         <h4>Verfügbare Kurse:</h4>
-        <p *ngIf="failedLoadingEvents">Fehler beim Laden der Kurs- und Klausurdaten</p>
+        <p *ngIf="failedLoadingEvents">
+          Fehler beim Laden der Kurs- und Klausurdaten
+        </p>
         <ul>
           <li *ngFor="let event of rawEvents">
             {{ event.kursname }}
@@ -15,6 +17,7 @@
       </div>
       <div *ngIf="canEdit" class="sidebar-section">
         <button (click)="openEventPopup()">Klausur planen</button>
+        <button (click)="openAdminPopup()">Admin</button>
       </div>
     </div>
     <div class="main">
@@ -59,12 +62,19 @@
         <br />
         <div>
           <label for="startTime">Start der Klausur:</label>
-          <timepicker formControlName="startTime" [showMeridian]="false"></timepicker>
+          <timepicker
+            formControlName="startTime"
+            [showMeridian]="false"
+          ></timepicker>
         </div>
         <br />
         <div>
           <label for="endTime">Ende der Klausur:</label>
-          <timepicker formControlName="endTime" [showMeridian]="false"></timepicker>
+          <timepicker
+            formControlName="endTime"
+            [showMeridian]="false"
+            (change)="onUpdateChange()"
+          ></timepicker>
         </div>
         <button (click)="addNewEvent()">Eintragen</button>
         <button (click)="closeEventPopup()">Verwerfen</button>
@@ -72,4 +82,69 @@
       </div>
     </div>
   </div>
+  <div *ngIf="isChangeOrDeleteOpen" class="popup-overlay">
+    <div class="popup">
+      <div>
+        <h2>Klausur verändern o. löschen:</h2>
+        <div>
+          <label for="kursSearch">Einen Kurs auswählen:</label>
+        </div>
+        <div>
+          <ul class="custom-list">
+            <li>
+              <label>
+                <input
+                  type="hidden"
+                  [id]="updateEvent.kursname"
+                  formControlName="updateKursEvent"
+                  [checked]="updateEvent.selected"
+                />
+                {{ updateEvent.kursname }}
+              </label>
+            </li>
+          </ul>
+        </div>
+        <br />
+        <div>
+          <label for="date">Ein Datum wählen:</label>
+          <br />
+          <input
+            type="text"
+            placeholder="Datum wählen"
+            class="form-control"
+            bsDatepicker
+            [bsConfig]="bsConfig"
+            [bsValue]="this.updateDate"
+          />
+        </div>
+        <br />
+        <div>
+          <label for="startTime">Start der Klausur:</label>
+          <timepicker
+            [formControlName]="'updateStartTime'"
+            [showMeridian]="false"
+          ></timepicker>
+        </div>
+        <br />
+        <div>
+          <label for="endTime">Ende der Klausur:</label>
+          <timepicker
+            [formControlName]="'updateEndTime'"
+            [showMeridian]="false"
+          ></timepicker>
+        </div>
+        <button
+        [disabled]="!updateFormIsDirty"
+        (click)="updateKlausurEvent()"
+      >
+        Ändern
+      </button>
+        <button (click)="deleteEvent()">Löschen</button>
+        <button (click)="closeEventPopup()">Verwerfen</button>
+
+        <p *ngIf="isInValid">Bitte überprüfe die Eingabe!</p>
+      </div>
+    </div>
+  </div>
+  <app-admin *ngIf="isAdminPopUpOpen" [adminData]="rawEvents"></app-admin>
 </form>

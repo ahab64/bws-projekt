@@ -1,30 +1,37 @@
-<div class="admin-page">
-    <h1>Admin Dashboard</h1>
-  
-    <!-- Section to Import CSV Files -->
-    <div class="csv-import-section">
-      <h2>Import CSV Files</h2>
-      <!-- Add your form controls for CSV file import here -->
-      <form [formGroup]="adminForm">
-        <!-- Example: Input for file upload -->
-        <input type="file" formControlName="csvFile" accept=".csv" />
-        <!-- Add more form controls and buttons as needed -->
-        <button type="submit">Import</button>
-      </form>
+<div class="popup-overlay">
+  <div class="popup">
+    <h2>Admin-Bereich</h2>
+    <div>
+      <label for="pendingUserSearch">Pending Users:</label>
     </div>
-  
-    <!-- Section to Approve Pending Users -->
-    <div class="pending-users-section">
-      <h2>Pending Users</h2>
-      <div class="scrollable-list">
-        <!-- Display pending users in a scrollable list -->
-        <ul>
-          <li *ngFor="let user of pendingUsers">{{ user.name }}</li>
-          <!-- Use ngFor to loop through pending users and display them -->
-        </ul>
-      </div>
-      <!-- Add buttons or actions to approve users -->
-      <button (click)="approveUser(user)" *ngFor="let user of pendingUsers">Approve {{ user.name }}</button>
+    <div>
+    <div>
+      <ul class="custom-list">
+        <li *ngFor="let user of pendingUser">
+          <label>
+            <input
+              type="checkbox"
+              [id]="user.userId"
+              [value]="[user]"
+              (change)="onChangeUserliste($event,user)"
+            />
+            {{ user.name }}
+          </label>
+        </li>
+        <li *ngIf="!hasPendingUser">
+          <label>
+            <input
+              type="checkbox"
+              disabled
+            />
+            Keine Pending-User verfügbar.
+          </label>
+        </li>
+      </ul>
     </div>
+    <br />
+    <button (click)="onApprove()">Approve</button>
+    <button (click)="onBlock()">Blockieren</button>
+    <div>
   </div>
-  
+</div>
