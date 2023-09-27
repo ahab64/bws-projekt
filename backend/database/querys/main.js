@@ -194,7 +194,8 @@ async function updateKlausurTermin(klausur_id, dateStart, dateEnd, db) {
 
   try {
 
-    const update = await updateKlausurtermin(db, kursId, dateStart, dateEnd)
+    const update = await updateKlausurtermin(db, klausur_id, dateStart, dateEnd)
+    console.log('Update Erfolgt', klausur_id)
     return update;
   } catch (error) {
     console.error("Fehler beim Updaten:", error);
@@ -209,7 +210,8 @@ async function deleteKlausurTermin(klausur_id, db) {
   db = openDatabase();
 
   try {
-    const del = await deleteKlausurtermin(db, kursId)
+    const del = await deleteKlausurtermin(db, klausur_id)
+    console.log("Löschen erfolgt für Klausur", klausur_id);
     return del;
   } catch (error) {
     console.error("Fehler beim Löschen:", error);

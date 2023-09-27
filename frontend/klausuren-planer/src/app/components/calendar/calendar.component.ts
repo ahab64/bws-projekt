@@ -20,7 +20,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { UserRolle } from 'src/app/enums/userRollen.enum';
-import {  lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -34,7 +34,7 @@ export class CalendarComponent implements OnInit {
   canEdit: boolean = false;
   isInValid: boolean = false;
   isChangeOrDeleteOpen = false;
-  updateFormIsDirty: boolean = false
+  updateFormIsDirty: boolean = false;
   failedNewEvent = false;
   updateEvent = {
     klausurId: 0,
@@ -45,7 +45,7 @@ export class CalendarComponent implements OnInit {
     kursname: '',
     selected: true,
   };
-  updateDate: Date = new Date();
+  updateDate: Date | undefined = new Date();
   updateStartTime: Date | undefined = new Date();
   updateEndTime: Date | undefined = new Date();
   user: User;
@@ -90,13 +90,13 @@ export class CalendarComponent implements OnInit {
     this.localeService.use(this.locale);
     this.calendarForm = this.fb.group({
       selectedKursEvent: new FormControl('', Validators.required),
-      updateKursEvent: new FormControl('', Validators.required),
+      updateKursEvent: new FormControl(''),
       startTime: new FormControl('', [Validators.required]),
       endTime: new FormControl('', Validators.required),
       dateKlausur: new FormControl('', Validators.required),
-      updateDate: new FormControl(new Date(this.updateEvent.dateStart.substring(0, 10))),
+      updateDate: new FormControl(),
       updateStartTime: new FormControl(this.updateStartTime),
-      updateEndTime: new UntypedFormControl(this.updateEndTime)
+      updateEndTime: new UntypedFormControl(this.updateEndTime),
     });
   }
 
@@ -141,6 +141,7 @@ export class CalendarComponent implements OnInit {
   }
 
   addNewEvent() {
+    console.log(this.calendarForm.get('selectedKursEvent')?.valid);
     if (!this.calendarForm.valid) {
       this.isInValid = true;
     } else {
@@ -195,12 +196,12 @@ export class CalendarComponent implements OnInit {
     this.isAdminPopUpOpen = true;
   }
 
-  onUpdateChange(){
+  onUpdateChange() {
     this.updateFormIsDirty = true;
   }
 
   changeOrDelete(eventClickInfo: EventClickArg) {
-    
+    console.log(eventClickInfo);
 
     const start = eventClickInfo.event.start?.toString();
     const end = eventClickInfo.event.end?.toString();
@@ -210,18 +211,20 @@ export class CalendarComponent implements OnInit {
       const endFormated = this.calendarService.formartTimeString(end);
       const words = eventClickInfo.event.title.split(' ');
 
+      this.updateEvent.klausurId = parseInt(eventClickInfo.event._def.groupId);
       this.updateEvent.kursId = parseInt(eventClickInfo.event._def.publicId);
       this.updateEvent.dateStart = startFormated;
       this.updateEvent.dateEnd = endFormated;
       console.log(startFormated);
       this.updateEvent.kursname = words[0];
       this.updateEvent.kurslehrer = words[2];
-      this.updateDate = new Date(this.updateEvent.dateStart.substring(0, 10))
+      this.updateDate = new Date(this.updateEvent.dateStart.substring(0, 10));
 
-      const startTime = this.calendarService.extractHoursAndMinutes(startFormated);
+      const startTime =
+        this.calendarService.extractHoursAndMinutes(startFormated);
       const endTime = this.calendarService.extractHoursAndMinutes(endFormated);
 
-      console.log(startTime, endTime)
+      console.log(startTime, endTime);
 
       this.updateStartTime?.setHours(startTime.hours);
       this.updateStartTime?.setMinutes(startTime.minutes);
@@ -232,11 +235,40 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  deleteEvent(){
-
+  async deleteEvent() {
+    const klausurId = this.updateEvent.klausurId;
+    try {
+      lastValueFrom(this.calendarService.deleteCalendarEvent(klausurId));
+      this.isChangeOrDeleteOpen = false;
+    } catch (error) {
+      console.log(error);
+    }
   }
+  updateKlausurEvent() {
+    const klausurId = this.updateEvent.klausurId;
+    const date = this.calendarForm.get('updateDate')?.value;
+    const startTime = this.calendarForm.get('updateStartTime')?.value;
+    const endTime = this.calendarForm.get('updateEndTime')?.value;
 
-  updateKlausurEvent(){
+    console.log(this.calendarForm.get('updateStartTime')?.value);
 
+    const { startBeforeEnd, start, end } = this.formatTimeAndDate(
+      date,
+      startTime,
+      endTime
+    );
+    console.log(startTime, endTime, date); //date is null, ngIf=canEdit, ngIf valid bei button
+    if (startBeforeEnd) {
+      try {
+        lastValueFrom(
+          this.calendarService.updateCalendarEvent(klausurId, start, end)
+        );
+        this.isChangeOrDeleteOpen = false;
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      this.isInValid = true;
+    }
   }
 }

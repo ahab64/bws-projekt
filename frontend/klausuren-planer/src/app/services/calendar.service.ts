@@ -25,12 +25,30 @@ export class CalendarService {
     );
   }
 
-  deleteCalendarEvent(){
-
+  deleteCalendarEvent(klausurId: number){
+    const url = 'http://localhost:3001/api/deleteTermin';
+    const data = {
+      klausur_id: klausurId
+    }
+    return this.http.post<any>(url, data).pipe(
+      catchError((error) => {
+        throw error;
+      })
+    )
   }
 
-  updateCalendarEvent(){
-    
+  updateCalendarEvent(klausurId: number, start: string, end: string){
+    const url = 'http://localhost:3001/api/updateTermin';
+    const data = {
+      klausur_id: klausurId,
+      date_start: start,
+      date_ende: end
+    }
+    return this.http.post<any>(url, data).pipe(
+      catchError((error) => {
+        throw error;
+      })
+    )
   }
   formartTimeString(dateString: string) {
     // Create a Date object from the input string
