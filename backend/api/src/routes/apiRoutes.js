@@ -16,26 +16,23 @@ const sendMailController = require('../controllers/sendMailController');
 router.get('/api/id/:email', auth, handleGetUser);
 router.post('/api/login', handleLogin);
 router.post('/api/registration', handleNewUser);
-router.post('/api/kursemail', handleEmailFromKurs);
-router.post('/api/admin/user-approval', handleUserApproval);
-router.post('/api/kursfromuser', handleKursFromUser);
-router.post('/api/kursefromlevel', handleKursFromLevel);
-router.post('/api/klausureintrag', handleNewKlausurTermin);
+router.post('/api/admin/user-approval', auth, handleUserApproval);
+router.post('/api/kursfromuser', auth, handleKursFromUser);
+router.post('/api/kursefromlevel', auth, handleKursFromLevel);
 router.post('/api/csv',auth, handleCsvUser);
-
+router.post('/api/kursemail', auth, handleEmailFromKurs);
+router.post('/api/klausureintrag', auth, handleNewKlausurTermin);
+router.post('/api/deleteTermin', auth, handleDeleteTermin);
+router.post('/api/updateTermin', auth, handleUpdateKlausurtermin);
 //Eintragen für Klausurtermine mit kursId oder kursname datum
 //To Do: Endpunkte für...
 //EMails einer Klasse
 //Email eines Kurslehrers
 //Kurse pro User
 //Eintragung eins Klausurtermin (post)
-router.post('/api/kursemail', auth, handleEmailFromKurs);
-router.post('/api/admin/user-approval', handleUserApproval);
-router.post('/api/kursfromuser', auth, handleKursFromUser);
-router.post('/api/kursefromlevel', auth, handleKursFromLevel);
-router.post('/api/klausureintrag', auth, handleNewKlausurTermin);
-router.post('/api/deleteTermin', handleDeleteTermin);
-router.post('/api/updateTermin', handleUpdateKlausurtermin);
+
+
+
 //To Do: Endpunkte für...
 //EMails einer Klasse
 //Email eines Kurslehrers
