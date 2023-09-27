@@ -23,6 +23,8 @@
     "@fullcalendar/core": "^6.1.8",
     "@fullcalendar/daygrid": "^6.1.8",
     "@types/crypto-js": "^4.1.2",
+    "@types/papaparse": "^5.3.9",
+    "api": "^6.1.1",
     "bootstrap": "^5.3.2",
     "crypto-js": "^4.1.1",
     "fullcalendar": "^6.1.8",
@@ -31,7 +33,9 @@
     "ng2-datetime": "^1.4.0",
     "ngx-bootstrap": "^11.0.2",
     "ngx-webstorage": "^12.0.0",
+    "papaparse": "^5.4.1",
     "rxjs": "~7.8.0",
+    "service": "^0.1.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },

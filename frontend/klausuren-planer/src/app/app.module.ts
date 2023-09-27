@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from  '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CsvUploadComponent } from './csv-upload/csv-upload.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AuthService } from './services/auth.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -32,6 +33,10 @@ import { AuthInterceptor } from './services/auth-interceptor.interceptor';
     CalendarComponent,
     LoginComponent,
     RegistrationComponent,
+<<<<<<< HEAD
+    CsvUploadComponent
+=======
+>>>>>>> main
   ],
   imports: [
     JwtModule.forRoot({
