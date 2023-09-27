@@ -1,1 +1,75 @@
-<full-calendar [options]="calendarOptions"></full-calendar>
+<form [formGroup]="calendarForm">
+  <div class="app">
+    <div class="app-sidebar">
+      <div class="sidebar-section">
+        <h2>Herzlich Willkommen, {{ user.name }}!</h2>
+      </div>
+      <div class="sidebar-section">
+        <h4>Verfügbare Kurse:</h4>
+        <p *ngIf="failedLoadingEvents">Fehler beim Laden der Kurs- und Klausurdaten</p>
+        <ul>
+          <li *ngFor="let event of rawEvents">
+            {{ event.kursname }}
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="canEdit" class="sidebar-section">
+        <button (click)="openEventPopup()">Klausur planen</button>
+      </div>
+    </div>
+    <div class="main">
+      <full-calendar [options]="calendarOptions" #fullcalendar> </full-calendar>
+    </div>
+  </div>
+  <div *ngIf="isAddEventPopupOpen" class="popup-overlay">
+    <div class="popup">
+      <div>
+        <h2>Eine Klausur planen:</h2>
+        <div>
+          <label for="kursSearch">Einen Kurs auswählen:</label>
+        </div>
+        <div>
+          <ul class="custom-list">
+            <li *ngFor="let event of rawEvents">
+              <label>
+                <input
+                  type="radio"
+                  [id]="event.kursname"
+                  formControlName="selectedKursEvent"
+                  [value]="[event.kursname, event.kurslehrer]"
+                />
+                {{ event.kursname }}
+              </label>
+            </li>
+          </ul>
+        </div>
+        <br />
+        <div>
+          <label for="date">Ein Datum wählen:</label>
+          <br />
+          <input
+            formControlName="dateKlausur"
+            type="text"
+            placeholder="Datum wählen"
+            class="form-control"
+            bsDatepicker
+            [bsConfig]="bsConfig"
+          />
+        </div>
+        <br />
+        <div>
+          <label for="startTime">Start der Klausur:</label>
+          <timepicker formControlName="startTime" [showMeridian]="false"></timepicker>
+        </div>
+        <br />
+        <div>
+          <label for="endTime">Ende der Klausur:</label>
+          <timepicker formControlName="endTime" [showMeridian]="false"></timepicker>
+        </div>
+        <button (click)="addNewEvent()">Eintragen</button>
+        <button (click)="closeEventPopup()">Verwerfen</button>
+        <p *ngIf="isInValid">Bitte überprüfe die Eingabe!</p>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,5 +1,6 @@
-const { newUser } = require('../../../database/querys/main')
-const validator = require('validator');
+const { newUser, getUser } = require('../../../database/querys/main')
+const validator = require('validator')
+var bcrypt = require('bcryptjs');
 
 async function handleNewUser(req, res) {
     const newUserData = req.body;
@@ -9,20 +10,35 @@ async function handleNewUser(req, res) {
     const kurse = newUserData.kurse;
     const rolle = newUserData.rolle;
 
+    const oldUser =  getUser(email, (err, res) => {
+        if(res){
+            return true;
+        } else {
+            return false;
+        }
+    })
+
     // Datenvalidierung - Beispiel: Überprüfung der E-Mail-Adresse
     if (!validator.isEmail(email)) {
         res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
         return;
     }
 
+    if(oldUser){
+        res.status(409).json({error: 'Email ist bereits registriert.'})
+    }
+    
+    encyrptedPw = await bcrypt.hash(pw, 10);
+
     try {
-        const result = await newUser(name, email, pw, kurse, rolle);
+        const result = await newUser(name, email, encyrptedPw, kurse, rolle);
         console.log('Neuer Benutzer wurde erstellt:', result);
         res.status(201).json({ status: 201, message: 'Benutzer erfolgreich erstellt', userId: result });
     } catch (error) {
         console.error('Fehler bei der Benutzererstellung:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
+
 }
 
 module.exports = { handleNewUser };

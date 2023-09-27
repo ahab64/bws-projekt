@@ -1,0 +1,5 @@
+*.log
+*.sqbpro
+*.DS_Store
+*.env
+*.db

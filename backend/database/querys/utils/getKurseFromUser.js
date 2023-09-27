@@ -1,6 +1,7 @@
 async function getKurseFromUser(userId, db) {
   const sqlStatement = `
     SELECT
+      k.kurs_id AS id,
       k.name AS kursname,
       kt.date_start,
       kt.date_ende
@@ -19,6 +20,7 @@ async function getKurseFromUser(userId, db) {
           const kurslehrer = kursnameParts.pop();
           const kursname = kursnameParts.join('_'); 
           return {
+            id: row.id,
             kursname,
             kurslehrer,
             date_start: row.date_start || '',

@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.textContentService.getTextContents().subscribe((data) => {
       this.textInhalte = data;
-      console.log(this.textInhalte);
     });
   }
 

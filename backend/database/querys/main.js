@@ -10,20 +10,23 @@ const { updateStatus } = require('./utils/updateUserStatus');
 const { getKurseFromUser } = require('./utils/getKurseFromUser');
 const { getKurseLevel } = require('./utils/getKurseLevel');
 const { insertKlausurTermin } = require('./utils/insertKlausurTermin');
+const { updateKlausurtermin } = require('./utils/updateKlausur');
+const { deleteKlausurtermin } = require('./utils/deleteKlausur');
 
 //TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
   db = openDatabase();
   try {
-    const emails = await getUsersInKurs(kursName, db);
-    callback(null, emails);
+    const emailsUndRollen = await getUsersInKurs(kursName, db, true);
+    callback(null, emailsUndRollen);
   } catch (error) {
-    console.error('Fehler beim Abrufen der E-Mails im Kurs:', error);
+    console.error('Fehler beim Abrufen der E-Mails/Rollen im Kurs:', error);
     callback(error, null);
   } finally {
     closeDatabaseConnection(db);
   }
 }
+
 
 //To do: refactor so logic is seperated in getUserFile
 function getUser(email, callback) {
@@ -116,6 +119,7 @@ async function getKurseUser(userId) {
     if (kurseMitKlausurtermine.length === 0) {
       // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
       return kurse.map(kurs => ({
+        id: kurs.id,
         kursname: kurs.kursname,
         kurslehrer: kurs.kurslehrer,
         date_start: '',
@@ -153,13 +157,13 @@ async function getKurseFromStufe(stufe) {
 }
 
 async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
-   db = openDatabase(); 
+  db = openDatabase();
 
   try {
 
     const eintrag = await insertKlausurTermin(kursId, dateStart, dateEnd, db)
-  
-    return eintrag; 
+
+    return eintrag;
   } catch (error) {
     console.error('Fehler beim Eintragen:', error);
 
@@ -169,5 +173,37 @@ async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   }
 }
 
+async function updateKlausurTermin(kursId, dateStart, dateEnd, db) {
+  db = openDatabase();
 
-module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin};
+  try {
+
+    const update = await updateKlausurtermin(db, kursId, dateStart, dateEnd)
+    return update;
+  } catch (error) {
+    console.error('Fehler beim Updaten:', error);
+
+    return null;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+async function deleteKlausurTermin(kursId, db) {
+  db = openDatabase();
+
+  try {
+    const del = await deleteKlausurtermin(db, kursId)
+    return del;
+  } catch (error) {
+    console.error('Fehler beim Löschen:', error);
+
+    return null;
+  } finally {
+    closeDatabaseConnection(db);
+  }
+}
+
+
+
+module.exports = { getUser, newUser, getEmailsInKurs, updateUserStatus, getKurseUser, getKurseFromStufe, newKlausurtermin, updateKlausurTermin, deleteKlausurTermin};
