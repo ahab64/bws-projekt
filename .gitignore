@@ -1,3 +1,7 @@
-**/node_modules
-
-
+# Ignoriere alle Dateien mit der Erweiterung .log
+*.log
+*.env
+datenbank.sqbpro
+*.DS_Store
+datenbank.db
+node_modules
