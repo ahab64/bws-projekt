@@ -1,0 +1,6 @@
+<!-- csv-upload.component.html -->
+
+<div>
+  <input type="file" (change)="onFileSelected($event)" accept=".csv" />
+  <button (click)="parseAndSendCsv()">Upload CSV</button>
+</div>
