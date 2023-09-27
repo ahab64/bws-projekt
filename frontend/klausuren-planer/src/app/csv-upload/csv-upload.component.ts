@@ -1,5 +1,4 @@
 import { CsvUploadService } from '../services/csv-upload.service';
-
 import { Component } from '@angular/core';
 import * as Papa from 'papaparse';
 
@@ -28,11 +27,16 @@ export class CsvUploadComponent {
           dynamicTyping: true, // Automatically detect data types
           skipEmptyLines: true, // Skip empty lines
           complete: (result: any) => {
-            // Convert the result to JSON
-            const jsonData = result.data;
-            console.log(jsonData);
+            // Post-process the parsed data to split the "Kurse" values
+            const jsonData = result.data.map((row: any) => {
+              // Check if "Kurse" exists and is a string, then split by semicolon and trim
+              if (typeof row.Kurse === 'string') {
+                row.Kurse = row.Kurse.split(';').map((kurs: string) => kurs.trim());
+              }
+              return row;
+            });
 
-            // Send the JSON data to the CsvUploadService's sendCsvToApi method
+            // Send the JSON data to the CsvUploadService's sendJsonToApi method
             this.csvUploadService.sendJsonToApi(jsonData).subscribe(
               (response: any) => {
                 console.log('API Response:', response);

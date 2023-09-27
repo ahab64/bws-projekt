@@ -1,32 +1,33 @@
 const { newUser } = require('../../../database/querys/main');
 
 async function handleCsvUser(req, res) {
-    try {
+  try {
+    // Assuming req.body contains the JSON data
+    const jsonData = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
-      const jsonData = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
-  
-      if (!Array.isArray(jsonData)) {
-        throw new Error('JSON data is not an array');
-      }
-  
-      const insertPromises = [];
-  
-      for (const user of jsonData) {
-        const { Name, Email, Password, Kurse, Rolle } = user;
-        console.log(Kurse);
-  
-        const newUserPromise = newUser(Name, Password, Email, Kurse, Rolle);
-        insertPromises.push(newUserPromise);
-      }
-  
-      await Promise.all(insertPromises);  
-  
-      res.status(201).json({ status: 201, message: 'Users erfolgreich erstellt' });
-    } catch (error) {
-      console.error('Fehler beim Hinzufügen der Users:', error);
-      res.status(500).json({ error: 'Interner Serverfehler' });
+    if (!Array.isArray(jsonData)) {
+      throw new Error('JSON data is not an array');
     }
+
+    const insertPromises = [];
+
+    for (const user of jsonData) {
+      const { Name, Email, Password, Kurse, Rolle } = user;
+      console.log(jsonData);
+
+      // Modify newUser function to accept kurseArray
+      const newUserPromise = newUser(Name, Password, Email, Kurse, Rolle);
+      insertPromises.push(newUserPromise);
+    }
+
+    await Promise.all(insertPromises); // Wait for all user inserts to complete
+
+    console.log("sekerim");
+    res.status(201).json({ status: 201, message: 'Users erfolgreich erstellt' });
+  } catch (error) {
+    console.error('Fehler beim Hinzufügen der Users:', error);
+    res.status(500).json({ error: 'Interner Serverfehler' });
   }
-  
-  module.exports = { handleCsvUser };
-  
+}
+
+module.exports = { handleCsvUser };
