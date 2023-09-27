@@ -17,12 +17,12 @@ async function handleNewKlausurTermin(req, res) {
 
 async function handleUpdateKlausurtermin(req, res) {
     const newKlausurterminData = req.body;
-    const kurs_id = newKlausurterminData.kurs_id;
+    const klausur_id = newKlausurterminData.klausur_id;
     const date_start = newKlausurterminData.date_start;
     const date_end = newKlausurterminData.date_ende;
 
     try {
-        await updateKlausurTermin(kurs_id, date_start, date_end);
+        await updateKlausurTermin(klausur_id, date_start, date_end);
         res.status(201).json({ status: 201, message: 'Klausurtermin erfolgreich aktualisiert!' });
     } catch (error) {
         console.error('Fehler beim Aktualisieren des Klausurtermins:', error);
@@ -31,10 +31,10 @@ async function handleUpdateKlausurtermin(req, res) {
 }
 
 async function handleDeleteTermin(req, res) {
-    const kurs_id = req.body.kurs_id;
+    const klausur_id = req.body.klausur_id;
 
     try {
-        await deleteKlausurTermin(kurs_id); 
+        await deleteKlausurTermin(klausur_id);
         res.status(200).json({ status: 200, message: 'Klausurtermin erfolgreich gelöscht' });
     } catch (error) {
         console.error('Fehler beim Löschen des Klausurtermins:', error);
