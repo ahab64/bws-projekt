@@ -33,10 +33,7 @@ import { AuthInterceptor } from './services/auth-interceptor.interceptor';
     CalendarComponent,
     LoginComponent,
     RegistrationComponent,
-<<<<<<< HEAD
     CsvUploadComponent
-=======
->>>>>>> main
   ],
   imports: [
     JwtModule.forRoot({
