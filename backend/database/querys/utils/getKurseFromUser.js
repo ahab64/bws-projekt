@@ -3,6 +3,7 @@ async function getKurseFromUser(userId, db) {
     SELECT
       k.kurs_id AS id,
       k.name AS kursname,
+      kt.klausur_id,
       kt.date_start,
       kt.date_ende
     FROM Kurse AS k
@@ -23,8 +24,9 @@ async function getKurseFromUser(userId, db) {
             id: row.id,
             kursname,
             kurslehrer,
+            klausur_id: row.klausur_id, 
             date_start: row.date_start || '',
-            date_ende: row.date_ende || ''
+            date_ende: row.date_ende || '',
           };
         });
         console.log('Kurse abgerufen:', kursDates);
