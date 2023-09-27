@@ -15,9 +15,10 @@
           </li>
         </ul>
       </div>
-      <div *ngIf="canEdit" class="sidebar-section">
-        <button (click)="openEventPopup()">Klausur planen</button>
-        <button (click)="openAdminPopup()">Admin</button>
+      <div class="sidebar-section">
+        <button *ngIf="canEdit" (click)="openEventPopup()">Klausur planen</button>
+        <button *ngIf="isAdmin" (click)="openAdminPopup()">Admin</button>
+        <button (click)="onLogOut()">Ausloggen</button>
       </div>
     </div>
     <div class="main">
@@ -110,11 +111,11 @@
           <br />
           <input
             type="text"
-            placeholder="Datum wählen"
+            [placeholder]="this.updateDate?.toLocaleDateString()"
             class="form-control"
             bsDatepicker
             [bsConfig]="bsConfig"
-            [bsValue]="this.updateDate"
+            formControlName="updateDate"
           />
         </div>
         <br />
@@ -133,11 +134,7 @@
             [showMeridian]="false"
           ></timepicker>
         </div>
-        <button
-        (click)="updateKlausurEvent()"
-      >
-        Ändern
-      </button>
+        <button (click)="updateKlausurEvent()">Ändern</button>
         <button (click)="deleteEvent()">Löschen</button>
         <button (click)="closeEventPopup()">Verwerfen</button>
 
@@ -145,5 +142,8 @@
       </div>
     </div>
   </div>
-  <app-admin *ngIf="isAdminPopUpOpen" [adminData]="rawEvents"></app-admin>
+  <app-admin
+    *ngIf="isAdminPopUpOpen"
+  >
+  </app-admin>
 </form>

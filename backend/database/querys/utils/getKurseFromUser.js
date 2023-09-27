@@ -24,7 +24,7 @@ async function getKurseFromUser(userId, db) {
             id: row.id,
             kursname,
             kurslehrer,
-            klausur_id: row.klausur_id, 
+            klausur_id: row.klausur_id || '',
             date_start: row.date_start || '',
             date_ende: row.date_ende || '',
           };

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -14,8 +14,9 @@ import { AdminService } from 'src/app/services/admin.service';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit {
-  @Input() adminData: any;
+  @Output() isOpen = new EventEmitter<boolean>();
 
+  isChildeOpen: boolean = true;
   pendingUser: PendingUser[] = [];
   hasPendingUser: boolean = true;
   failedApprovals: {
@@ -72,5 +73,9 @@ export class AdminComponent implements OnInit {
     this.loadPendingUser();
   }
 
+  onAbbruch(){
+    this.isOpen.emit(false);
+    this.isChildeOpen = false;
+  }
   onBlock() {}
 }

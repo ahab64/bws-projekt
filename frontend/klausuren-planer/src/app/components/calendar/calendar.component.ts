@@ -21,6 +21,7 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { UserRolle } from 'src/app/enums/userRollen.enum';
 import { lastValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-calendar',
@@ -32,6 +33,7 @@ export class CalendarComponent implements OnInit {
   isAddEventPopupOpen: boolean = false;
   isAdminPopUpOpen: boolean = false;
   canEdit: boolean = false;
+  isAdmin: boolean = false;
   isInValid: boolean = false;
   isChangeOrDeleteOpen = false;
   updateFormIsDirty: boolean = false;
@@ -82,11 +84,13 @@ export class CalendarComponent implements OnInit {
     private calendarService: CalendarService,
     private dataSharingService: DataSharingService,
     private fb: FormBuilder,
-    private localeService: BsLocaleService
+    private localeService: BsLocaleService,
+    private authService: AuthService
   ) {
     defineLocale('de', _deLocale);
     this.user = this.dataSharingService.getUser();
     this.canEdit = this.user.userRole !== UserRolle.Student;
+    this.isAdmin =  this.user.userRole === UserRolle.Admin;
     this.localeService.use(this.locale);
     this.calendarForm = this.fb.group({
       selectedKursEvent: new FormControl('', Validators.required),
@@ -94,7 +98,7 @@ export class CalendarComponent implements OnInit {
       startTime: new FormControl('', [Validators.required]),
       endTime: new FormControl('', Validators.required),
       dateKlausur: new FormControl('', Validators.required),
-      updateDate: new FormControl(),
+      updateDate: new FormControl(''),
       updateStartTime: new FormControl(this.updateStartTime),
       updateEndTime: new UntypedFormControl(this.updateEndTime),
     });
@@ -141,7 +145,6 @@ export class CalendarComponent implements OnInit {
   }
 
   addNewEvent() {
-    console.log(this.calendarForm.get('selectedKursEvent')?.valid);
     if (!this.calendarForm.valid) {
       this.isInValid = true;
     } else {
@@ -215,7 +218,6 @@ export class CalendarComponent implements OnInit {
       this.updateEvent.kursId = parseInt(eventClickInfo.event._def.publicId);
       this.updateEvent.dateStart = startFormated;
       this.updateEvent.dateEnd = endFormated;
-      console.log(startFormated);
       this.updateEvent.kursname = words[0];
       this.updateEvent.kurslehrer = words[2];
       this.updateDate = new Date(this.updateEvent.dateStart.substring(0, 10));
@@ -237,38 +239,48 @@ export class CalendarComponent implements OnInit {
 
   async deleteEvent() {
     const klausurId = this.updateEvent.klausurId;
+    console.log(klausurId);
     try {
       lastValueFrom(this.calendarService.deleteCalendarEvent(klausurId));
       this.isChangeOrDeleteOpen = false;
     } catch (error) {
-      console.log(error);
+      this.isInValid = true;
+    } finally {
+      this.loadCalendarEvents()
+      this.fullcalendar.getApi().render();
     }
   }
-  updateKlausurEvent() {
+  async updateKlausurEvent() {
     const klausurId = this.updateEvent.klausurId;
     const date = this.calendarForm.get('updateDate')?.value;
     const startTime = this.calendarForm.get('updateStartTime')?.value;
     const endTime = this.calendarForm.get('updateEndTime')?.value;
-
-    console.log(this.calendarForm.get('updateStartTime')?.value);
 
     const { startBeforeEnd, start, end } = this.formatTimeAndDate(
       date,
       startTime,
       endTime
     );
-    console.log(startTime, endTime, date); //date is null, ngIf=canEdit, ngIf valid bei button
-    if (startBeforeEnd) {
+
+    if(startBeforeEnd){
       try {
         lastValueFrom(
           this.calendarService.updateCalendarEvent(klausurId, start, end)
         );
+        this.loadCalendarEvents()
         this.isChangeOrDeleteOpen = false;
+
       } catch (error) {
         console.log(error);
+        this.isInValid = true;
+      } finally {
+        this.fullcalendar.getApi().refetchEvents();
       }
     } else {
       this.isInValid = true;
     }
-  }
+    }
+    onLogOut(){
+      this.authService.logout();
+    }
 }

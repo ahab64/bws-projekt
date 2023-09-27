@@ -1,4 +1,4 @@
-<div class="popup-overlay">
+<div *ngIf="isChildeOpen" class="popup-overlay">
   <div class="popup">
     <h2>Admin-Bereich</h2>
     <div>
@@ -32,6 +32,7 @@
     <br />
     <button (click)="onApprove()">Approve</button>
     <button (click)="onBlock()">Blockieren</button>
+    <button (click)="onAbbruch()">Abbruch</button>
     <div>
   </div>
 </div>
