@@ -25,30 +25,54 @@ export class CalendarService {
     );
   }
 
-  deleteCalendarEvent(klausurId: number){
+  deleteCalendarEvent(klausurId: number) {
     const url = 'http://localhost:3001/api/deleteTermin';
     const data = {
-      klausur_id: klausurId
-    }
+      klausur_id: klausurId,
+    };
     return this.http.post<any>(url, data).pipe(
       catchError((error) => {
         throw error;
       })
-    )
+    );
   }
 
-  updateCalendarEvent(klausurId: number, start: string, end: string){
+  createIsoString(dayDate: string, timeDate: string): string {
+    const inputDateString =
+      timeDate
+    const targetDateString = dayDate;
+
+    // Datum aus dem ersten String extrahieren
+    const inputDate = new Date(inputDateString);
+
+    // Zeit aus dem ersten Datum extrahieren
+    const inputTime = inputDate.toTimeString().split(' ')[0];
+
+    // Datum aus dem zweiten String extrahieren
+    const targetDate = new Date(targetDateString);
+
+    // Das Datum des zweiten Strings auf das Datum des ersten Strings setzen
+    targetDate.setHours(Number(inputTime.split(':')[0]));
+    targetDate.setMinutes(Number(inputTime.split(':')[1]));
+    targetDate.setSeconds(Number(inputTime.split(':')[2]));
+
+    // Das Format des zweiten Strings beachten (in ISO-Format umwandeln)
+     const formattedTargetDate = targetDate.toISOString();
+     return formattedTargetDate
+  }
+
+  updateCalendarEvent(klausurId: number, start: string, end: string) {
     const url = 'http://localhost:3001/api/updateTermin';
     const data = {
       klausur_id: klausurId,
       date_start: start,
-      date_ende: end
-    }
+      date_ende: end,
+    };
     return this.http.post<any>(url, data).pipe(
       catchError((error) => {
         throw error;
       })
-    )
+    );
   }
   formartTimeString(dateString: string) {
     // Create a Date object from the input string
@@ -106,17 +130,20 @@ export class CalendarService {
     }
   }
 
-  extractHoursAndMinutes(dateTimeStr: string): { hours: number, minutes: number } {
+  extractHoursAndMinutes(dateTimeStr: string): {
+    hours: number;
+    minutes: number;
+  } {
     // Split the date and time parts
-    const [dateStr, timeStr] = dateTimeStr.split("T");
+    const [dateStr, timeStr] = dateTimeStr.split('T');
 
     // Extract the hours and minutes from the time part
-    const [time, _] = timeStr.split(".");
-    const [hours, minutes] = time.split(":").map(Number);
+    const [time, _] = timeStr.split('.');
+    const [hours, minutes] = time.split(':').map(Number);
 
     return { hours, minutes };
-}
-  toLocalTime(date: Date){
+  }
+  toLocalTime(date: Date) {
     return date.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
   }
 
