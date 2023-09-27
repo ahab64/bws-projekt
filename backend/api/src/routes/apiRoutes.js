@@ -21,7 +21,7 @@ router.post('/api/admin/user-approval', handleUserApproval);
 router.post('/api/kursfromuser', handleKursFromUser);
 router.post('/api/kursefromlevel', handleKursFromLevel);
 router.post('/api/klausureintrag', handleNewKlausurTermin);
-router.post('/api/csv', handleCsvUser);
+router.post('/api/csv',auth, handleCsvUser);
 
 //Eintragen für Klausurtermine mit kursId oder kursname datum
 //To Do: Endpunkte für...

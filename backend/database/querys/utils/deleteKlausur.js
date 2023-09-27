@@ -1,6 +1,6 @@
-async function deleteKlausurtermin(db, kursId) {
+async function deleteKlausurtermin(db, klausur_id) {
     try {
-        const queryResult = await db.run("DELETE FROM Klausurtermine WHERE kurs_id = ?", [kursId]);
+        const queryResult = await db.run("DELETE FROM Klausurtermine WHERE klausur_id = ?", [klausur_id]);
         return queryResult;
     } catch (error) {
         console.error('Fehler beim Löschen des Klausurtermins:', error);
