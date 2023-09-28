@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserExtended } from '../models/userExtended.model';
@@ -13,6 +14,7 @@ export class RegistrationService {
 
   constructor(private http: HttpClient) { }
 
+  // Benutzerregistrierung durchführen
   registration(user: UserExtended) {
     const url = 'http://localhost:3001/api/registration';
     const data = {
@@ -25,6 +27,7 @@ export class RegistrationService {
     return this.http.post(url, data);
   }
 
+  // Kurse basierend auf der Klassenstufe abrufen
   getKurse(stufe: string): Observable<Kurs[]> {
     const url = 'http://localhost:3001/api/kursefromlevel';
     const data = {

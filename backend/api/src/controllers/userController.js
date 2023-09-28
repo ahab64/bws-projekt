@@ -1,5 +1,7 @@
+//Autor: Furkan Kildan
 const { updateUserStatus, getPendingUser } = require('../../../database/querys/main');
 
+//Userstatus approven
 async function handleUserApproval(req, res) {
     const { userId, action } = req.body;
 
@@ -20,6 +22,7 @@ async function handleUserApproval(req, res) {
     }
 }
 
+//Ruft alle Pending User auf
 async function handlePendingUser(req, res) {
     try {
        const pendingUser = await getPendingUser();

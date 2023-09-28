@@ -1,5 +1,7 @@
+//Autor: Furkan Kildan
 const { getKurseUser } = require('../../../database/querys/main');
 
+//Gibt alle Kurse von einem User
 async function handleKursFromUser(req, res) {
   const { userId } = req.body;
 

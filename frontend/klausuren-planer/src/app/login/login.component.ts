@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Observable } from 'rxjs';
@@ -8,6 +9,7 @@ import { User } from '../models/user.model';
 import { DataSharingService } from '../services/data-sharing.service';
 import { TextContentService } from '../services/text-content.service';
 
+//Login Komponente
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -37,13 +39,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // Behandelt das Absenden des Anmeldeformulars
   onSubmit() {
     this.loginService
       .login(this.username, this.password)
       .pipe(
         catchError((error) => {
           this.loginFailed = true;
-          console.error('Fehler bei der Anmeldung:', error);
           return throwError(() => error);
         })
       )
@@ -56,6 +58,7 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  // Navigiert zur Registrierungsseite
   onRegister() {
     this.router.navigate(['/registration'])
   }

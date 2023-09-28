@@ -1,5 +1,7 @@
+//Autor: Furkan Kildan
 const nodemailer = require('nodemailer');
 
+//Email Versender
 const transporter = nodemailer.createTransport({
   host: "smtp.office365.com",
   secureConnection: false,
@@ -13,6 +15,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+//Sendet eine Email raus
 const sendEmail = async (req, res) => {
   const { emailBody, emailSubject } = req.body; 
 

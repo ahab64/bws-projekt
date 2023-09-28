@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Kurs } from '../models/kurs.model';
@@ -16,24 +17,29 @@ export class DataSharingService {
     this.setUserName(userName);
   }
 
+  // Benutzerdaten aus dem Session Storage entfernen
   removeUser(){
     sessionStorage.removeItem('UserId');
     sessionStorage.removeItem('UserRole');
     sessionStorage.removeItem('UserName');
   }
 
+  // Private Hilfsfunktion zum Speichern der Benutzer-ID im Session Storage
   private setUserId(userId: number){
     sessionStorage.setItem('UserId', userId.toString());
   }
 
+  // Private Hilfsfunktion zum Speichern der Benutzerrolle im Session Storage
   private setUserRole(role: string){
     sessionStorage.setItem('UserRole', role);
   }
 
+  // Private Hilfsfunktion zum Speichern des Benutzernamens im Session Storage
   private setUserName(name: string){
     sessionStorage.setItem('UserName', name);
   }
 
+  // Benutzer-ID aus dem Session Storage abrufen
   getUserId(): number {
     const userId = sessionStorage.getItem('UserId');
     if(userId === null) {
@@ -43,6 +49,7 @@ export class DataSharingService {
     }
   }
 
+  // Benutzerinformationen aus dem Session Storage abrufen
   getUser(): User {
     const _userId = sessionStorage.getItem('UserId');
     const _userName = sessionStorage.getItem('UserName'); 

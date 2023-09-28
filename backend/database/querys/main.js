@@ -1,3 +1,4 @@
+//Autor: Furkan Kildan, Merlin Burbach, Sajiel Ahmad
 const {
   openDatabase,
   closeDatabaseConnection,
@@ -18,11 +19,11 @@ const { deleteKlausurtermin } = require("./utils/deleteKlausur");
 
 let db;
 
-//TO DO: remove error handling here
+//Gibt alle Email eines Kurses
 async function getEmailsInKurs(kursName, callback) {
   db = openDatabase();
   try {
-    const emailsUndRollen = await getUsersInKurs(kursName, db, true);
+    const emailsUndRollen = await getUsersInKurs(kursName, db);
     callback(null, emailsUndRollen);
   } catch (error) {
     console.error('Fehler beim Abrufen der E-Mails im Kurs:', error);
@@ -33,7 +34,7 @@ async function getEmailsInKurs(kursName, callback) {
 }
 
 
-//To do: refactor so logic is seperated in getUserFile
+//Gibt einen User raus durch email
 function getUser(email, callback) {
   db = openDatabase();
   const query = "SELECT * FROM User WHERE email = ?";
@@ -50,7 +51,7 @@ function getUser(email, callback) {
       return;
     }
 
-    const courseId = userRow.user_id;
+    const courseId = userRow.user_id; //Spiechert die User id
     const secondQuery = "SELECT * FROM Password WHERE user_id = ?";
 
     db.all(secondQuery, [courseId], (secondQueryErr, courseRows) => {
@@ -71,29 +72,29 @@ function getUser(email, callback) {
   });
   closeDatabaseConnection(this.db);
 }
-//TO DO: remove error handling here
+
+//Erstellt einen Neuen User
 async function newUser(name, email, password, kurse, rolle) {
-  const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
+  const db = openDatabase();
 
   try {
-    //let kursIds = [];
-    let userId;
+    let userId; //Speichert die neue User id
 
     userId = await insertIntoUser(name, email, rolle, db);
     await insertIntoPassword(password, userId, db);
     await insertIntoKursUser(db, userId, kurse);
 
-    return userId; // Erfolg: Benutzer-ID zurückgeben
+    return userId;
   } catch (error) {
     console.error("Fehler bei der Benutzererstellung:", error);
 
-    // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
     closeDatabaseConnection(db);
   }
 }
 
+//Updated den User Status
 async function updateUserStatus(userId, newStatus) {
   try {
     db = openDatabase();
@@ -105,6 +106,7 @@ async function updateUserStatus(userId, newStatus) {
   }
 }
 
+//Gibt all User mit Status Pending
 async function getPendingUser() {
   try {
     db = openDatabase();
@@ -117,6 +119,7 @@ async function getPendingUser() {
   }
 }
 
+//Gibt alle Kurse eines Users aus
 async function getKurseUser(userId) {
   try {
     db = openDatabase();
@@ -125,16 +128,14 @@ async function getKurseUser(userId) {
 
     if (!kurse || kurse.length === 0) {
       console.log("Keine Kurse gefunden für userId:", userId);
-      return []; // Wenn kein Kurs gefunden wird, gib ein leeres Array zurück
+      return []; 
     }
 
-    // Überprüfe, ob es Kurse ohne Klausurtermine gibt
     const kurseMitKlausurtermine = kurse.filter(
       (kurs) => kurs.date_start || kurs.date_ende
     );
 
     if (kurseMitKlausurtermine.length === 0) {
-      // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
       return kurse.map((kurs) => ({
         id: kurs.id,
         kursname: kurs.kursname,
@@ -153,6 +154,7 @@ async function getKurseUser(userId) {
   }
 }
 
+//Gibt alle Kurse einer Stufe zurück
 async function getKurseFromStufe(stufe) {
   try {
     db = openDatabase();
@@ -173,6 +175,7 @@ async function getKurseFromStufe(stufe) {
   }
 }
 
+//Erstellt neuen Klausurtermin
 async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   db = openDatabase();
 
@@ -189,11 +192,11 @@ async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   }
 }
 
+//Updated einen Klausurtermin
 async function updateKlausurTermin(klausur_id, dateStart, dateEnd, db) {
   db = openDatabase();
 
   try {
-
     const update = await updateKlausurtermin(db, klausur_id, dateStart, dateEnd)
     console.log('Update Erfolgt', klausur_id)
     return update;
@@ -206,6 +209,7 @@ async function updateKlausurTermin(klausur_id, dateStart, dateEnd, db) {
   }
 }
 
+//Löscht einen Klausurtermin
 async function deleteKlausurTermin(klausur_id, db) {
   db = openDatabase();
 

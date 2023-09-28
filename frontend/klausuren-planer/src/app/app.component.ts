@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Component } from '@angular/core';
 
 @Component({

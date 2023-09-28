@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
@@ -17,11 +18,10 @@ export class LoginService {
       password: password,
     };
 
-    // Use the map operator to transform the response into an Observable
     return this.http.post<any>(url, data).pipe(
       map((response) => {
         this.setSession(response);
-        return response; // You can return the response data if needed
+        return response;
       })
     );
   }

@@ -1,3 +1,4 @@
+//Autor: Sajiel Ahmad
 // Funktion zum Ausführen einer Abfrage und Rückgabe der ersten Zeile
 async function getFirstRow(sql, params, db) {
   return new Promise((resolve, reject) => {
