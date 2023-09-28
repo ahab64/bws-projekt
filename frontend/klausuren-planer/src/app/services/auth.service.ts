@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Injectable } from '@angular/core';
 import { DataSharingService } from './data-sharing.service';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
@@ -23,6 +24,7 @@ export class AuthService implements CanActivate {
     }
   }
 
+  // Überprüft ob der aktuelle Token noch gültig ist
   isTokenExpired(): boolean {
     const token = localStorage.getItem('token');
     if (token) {
@@ -34,10 +36,12 @@ export class AuthService implements CanActivate {
     return true;
   }
 
+  // Liest den aktuellen Token
   getToken() {
     return localStorage.getItem('token');
   }
 
+  // Loggt den User aus
   logout() {
     localStorage.removeItem('token');
     this.dataSharingService.removeUser();

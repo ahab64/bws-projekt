@@ -1,9 +1,9 @@
+//Autor: Sajiel Ahmad
 const { newUser } = require('../../../database/querys/main');
 
 async function handleCsvUser(req, res) {
   try {
-    // Assuming req.body contains the JSON data
-    const jsonData = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const jsonData = typeof req.body === 'object' ? req.body : JSON.parse(req.body); //Enthält die JSON Daten
 
     if (!Array.isArray(jsonData)) {
       throw new Error('JSON data is not an array');
@@ -12,17 +12,15 @@ async function handleCsvUser(req, res) {
     const insertPromises = [];
 
     for (const user of jsonData) {
-      const { Name, Email, Password, Kurse, Rolle } = user;
+      const { Name, Email, Password, Kurse, Rolle } = user; //Teilt die einzelnen Attribute eines Users
       console.log(jsonData);
 
-      // Modify newUser function to accept kurseArray
       const newUserPromise = newUser(Name, Password, Email, Kurse, Rolle);
       insertPromises.push(newUserPromise);
     }
 
-    await Promise.all(insertPromises); // Wait for all user inserts to complete
+    await Promise.all(insertPromises);
 
-    console.log("sekerim");
     res.status(201).json({ status: 201, message: 'Users erfolgreich erstellt' });
   } catch (error) {
     console.error('Fehler beim Hinzufügen der Users:', error);

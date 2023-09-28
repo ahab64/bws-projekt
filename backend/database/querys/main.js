@@ -1,3 +1,4 @@
+//Autor: Furkan Kildan, Merlin Burbach, Sajiel Ahmad
 const {
   openDatabase,
   closeDatabaseConnection,
@@ -18,6 +19,7 @@ const { deleteKlausurtermin } = require("./utils/deleteKlausur");
 
 let db;
 
+//Gibt alle Email eines Kurses
 async function getEmailsInKurs(kursName, callback) {
   db = openDatabase();
   try {
@@ -31,6 +33,7 @@ async function getEmailsInKurs(kursName, callback) {
   }
 }
 
+//Gibt einen User raus durch email
 function getUser(email, callback) {
   db = openDatabase();
   const query = "SELECT * FROM User WHERE email = ?";
@@ -47,7 +50,7 @@ function getUser(email, callback) {
       return;
     }
 
-    const courseId = userRow.user_id;
+    const courseId = userRow.user_id; //Spiechert die User id
     const secondQuery = "SELECT * FROM Password WHERE user_id = ?";
 
     db.all(secondQuery, [courseId], (secondQueryErr, courseRows) => {
@@ -69,12 +72,12 @@ function getUser(email, callback) {
   closeDatabaseConnection(this.db);
 }
 
+//Erstellt einen Neuen User
 async function newUser(name, email, password, kurse, rolle) {
-  const db = openDatabase(); 
+  const db = openDatabase();
 
   try {
     let userId;
-
     userId = await insertIntoUser(name, email, rolle, db);
     await insertIntoPassword(password, userId, db);
     await insertIntoKursUser(db, userId, kurse);
@@ -89,6 +92,7 @@ async function newUser(name, email, password, kurse, rolle) {
   }
 }
 
+//Updated den User Status
 async function updateUserStatus(userId, newStatus) {
   try {
     db = openDatabase();
@@ -100,6 +104,7 @@ async function updateUserStatus(userId, newStatus) {
   }
 }
 
+//Gibt all User mit Status Pending
 async function getPendingUser() {
   try {
     db = openDatabase();
@@ -112,6 +117,7 @@ async function getPendingUser() {
   }
 }
 
+//Gibt alle Kurse eines Users aus
 async function getKurseUser(userId) {
   try {
     db = openDatabase();
@@ -120,7 +126,7 @@ async function getKurseUser(userId) {
 
     if (!kurse || kurse.length === 0) {
       console.log("Keine Kurse gefunden für userId:", userId);
-      return []; // Wenn kein Kurs gefunden wird, gib ein leeres Array zurück
+      return []; 
     }
 
     const kurseMitKlausurtermine = kurse.filter(
@@ -128,7 +134,6 @@ async function getKurseUser(userId) {
     );
 
     if (kurseMitKlausurtermine.length === 0) {
-      // Wenn es keine Kurse mit Klausurterminen gibt, gib Kursname und Kurslehrer zurück
       return kurse.map((kurs) => ({
         id: kurs.id,
         kursname: kurs.kursname,
@@ -147,6 +152,7 @@ async function getKurseUser(userId) {
   }
 }
 
+//Gibt alle Kurse einer Stufe zurück
 async function getKurseFromStufe(stufe) {
   try {
     db = openDatabase();
@@ -167,6 +173,7 @@ async function getKurseFromStufe(stufe) {
   }
 }
 
+//Erstellt neuen Klausurtermin
 async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   db = openDatabase();
 
@@ -183,11 +190,11 @@ async function newKlausurtermin(kursId, dateStart, dateEnd, db) {
   }
 }
 
+//Updated einen Klausurtermin
 async function updateKlausurTermin(klausur_id, dateStart, dateEnd, db) {
   db = openDatabase();
 
   try {
-
     const update = await updateKlausurtermin(db, klausur_id, dateStart, dateEnd)
     console.log('Update Erfolgt', klausur_id)
     return update;
@@ -200,6 +207,7 @@ async function updateKlausurTermin(klausur_id, dateStart, dateEnd, db) {
   }
 }
 
+//Löscht einen Klausurtermin
 async function deleteKlausurTermin(klausur_id, db) {
   db = openDatabase();
 

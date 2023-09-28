@@ -1,7 +1,9 @@
+//Autor: Sajiel Ahmad, Merlin Burbach
 const { newUser, getUser } = require('../../../database/querys/main')
 const validator = require('validator')
 var bcrypt = require('bcryptjs');
 
+//Erstellt einen neuen User
 async function handleNewUser(req, res) {
     const newUserData = req.body;
     const name = newUserData.name;
@@ -18,7 +20,7 @@ async function handleNewUser(req, res) {
         }
     })
 
-    // Datenvalidierung - Beispiel: Überprüfung der E-Mail-Adresse
+    // Datenvalidierung
     if (!validator.isEmail(email)) {
         res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
         return;

@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -13,6 +14,7 @@ import { catchError, lastValueFrom, throwError } from 'rxjs';
 import { TextContentService } from 'src/app/services/text-content.service';
 import { Router } from '@angular/router';
 
+//Registrations Komponente
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -44,6 +46,7 @@ export class RegistrationComponent implements OnInit {
     private registrationService: RegistrationService,
     private textContentService: TextContentService
   ) {
+    // Initialisiere das RegistrationFormular mit Validierungen
     this.registrationForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -60,6 +63,7 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
+  // Behandelt die Änderung der Klassenstufe und lädt die Kursliste
   async onChangeStufe(): Promise<Kurs[]> {
     try {
       const stufe = this.registrationForm.get('klasse')?.value;
@@ -74,6 +78,7 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  // Behandelt die Änderung der ausgewählten Kurse
   onChangeKursliste(event: any, kurs: Kurs) {
     if (event.target.checked) {
       // Add the course to the user's selected courses
@@ -89,6 +94,7 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  // Behandelt das Absenden des Registrierungsformulars
   onSubmit() {
     if (this.registrationForm.valid && this.user.kurse.length > 0) {
       this.isInValid = false;
@@ -108,7 +114,6 @@ export class RegistrationComponent implements OnInit {
         .pipe(
           catchError((error) => {
             this.registrationFailed = true;
-            console.error('Fehler beim Registrieren', error);
             return throwError(() => error);
           })
         )
@@ -120,6 +125,7 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  // Navigiert zur Anmeldeseite
   onAnmelden(){
     this.router.navigate(['/'])
   }

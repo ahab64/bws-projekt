@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,
@@ -19,13 +20,17 @@ export class AuthInterceptor implements HttpInterceptor {
     const isLoginRequest = req.url.endsWith('/login');
     const isTextAssetRequest = req.url.endsWith('/text-inhalte.json');
     const isRegistrationRequest = req.url.endsWith('/registration');
+    // Wenn die Anfrage eine Login-Anfrage, eine Anfrage für Textinhalte oder eine Registrierungsanfrage ist, 
+    // wird sie ohne Änderungen weitergeleitet.
     if (isLoginRequest || isTextAssetRequest || isRegistrationRequest) {
       return next.handle(req);
     }
 
     const token = this.authService.getToken();
 
+    
     if (token !== null && token !== undefined) {
+      // Fügen Sie das Token als Header zur Anfrage hinzu
       const authReq = req.clone({
         setHeaders: {
           'x-access-token': token,
@@ -33,6 +38,7 @@ export class AuthInterceptor implements HttpInterceptor {
       });
       return next.handle(authReq);
     } else {
+      // Wenn kein Token vorhanden ist, führen Sie die Abmeldungsfunktion aus und geben Sie eine leere Antwort zurück.
       this.authService.logout();
       return EMPTY;
     }

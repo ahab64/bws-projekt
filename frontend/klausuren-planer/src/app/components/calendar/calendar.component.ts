@@ -1,3 +1,4 @@
+//Autor Merlin Burbach
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -23,6 +24,7 @@ import { UserRolle } from 'src/app/enums/userRollen.enum';
 import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
+//Kalendar Komponente
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -108,6 +110,7 @@ export class CalendarComponent implements OnInit {
     this.loadCalendarEvents();
   }
 
+  // Lädt die Kalenderereignisse beim Initialisieren der Komponente
   async loadCalendarEvents() {
     try {
       this.calendarOptions.events = (
@@ -119,14 +122,17 @@ export class CalendarComponent implements OnInit {
     }
   }
 
+  // Öffnet das Popup zum Hinzufügen eines neuen Ereignisses
   openEventPopup() {
     this.isAddEventPopupOpen = true;
   }
+  // Schließt das Popup zum Hinzufügen eines neuen Ereignisses
   closeEventPopup() {
     this.isAddEventPopupOpen = false;
     this.isChangeOrDeleteOpen = false;
   }
 
+  // Formatiert das Datum und die Uhrzeit für das Hinzufügen eines neuen Ereignisses
   formatTimeAndDate(date: string, startTime: string, endTime: string) {
     const _date = new Date(date);
     const _startTime = new Date(startTime);
@@ -144,6 +150,7 @@ export class CalendarComponent implements OnInit {
     };
   }
 
+  // Fügt ein neues Ereignis zum Kalender hinzu und speichert es in der Datenbank
   addNewEvent() {
     if (!this.calendarForm.valid) {
       this.isInValid = true;
@@ -168,7 +175,6 @@ export class CalendarComponent implements OnInit {
         const kurs = this.rawEvents.filter(
           (event) => event.kursname === title[0]
         );
-        console.log(kurs);
         this.addEventToDatabase(kurs[0].id, start, end);
         this.fullcalendar.getApi().addEvent(newEvent);
         this.isAddEventPopupOpen = false;
@@ -184,27 +190,26 @@ export class CalendarComponent implements OnInit {
     dateEnd: string
   ) {
     try {
-      console.log(dateEnd);
       const newEventConfirm = lastValueFrom(
         this.calendarService.addCalendarEvent(kursId, dateStart, dateEnd)
       );
     } catch (error) {
-      console.log(error);
       this.failedNewEvent = true;
-      console.log(this.failedNewEvent);
     }
   }
 
+  // Öffnet das Popup für administrative Aktionen
   openAdminPopup() {
     this.isAdminPopUpOpen = true;
   }
 
+  // Aktualisiert das Formular, wenn Änderungen vorgenommen werden
   onUpdateChange() {
     this.updateFormIsDirty = true;
   }
 
+  // Öffnet das Popup zum Ändern oder Löschen eines Ereignisses beim Klicken auf ein Ereignis
   changeOrDelete(eventClickInfo: EventClickArg) {
-    console.log(eventClickInfo);
 
     const start = eventClickInfo.event.start?.toString();
     const end = eventClickInfo.event.end?.toString();
@@ -226,8 +231,6 @@ export class CalendarComponent implements OnInit {
         this.calendarService.extractHoursAndMinutes(startFormated);
       const endTime = this.calendarService.extractHoursAndMinutes(endFormated);
 
-      console.log(startTime, endTime);
-
       this.updateStartTime?.setHours(startTime.hours);
       this.updateStartTime?.setMinutes(startTime.minutes);
       this.updateEndTime?.setHours(endTime.hours);
@@ -237,9 +240,9 @@ export class CalendarComponent implements OnInit {
     }
   }
 
+  // Löscht ein ausgewähltes Kalenderereignis
   async deleteEvent() {
     const klausurId = this.updateEvent.klausurId;
-    console.log(klausurId);
     try {
       lastValueFrom(this.calendarService.deleteCalendarEvent(klausurId));
       this.isChangeOrDeleteOpen = false;
@@ -250,6 +253,7 @@ export class CalendarComponent implements OnInit {
       this.fullcalendar.getApi().render();
     }
   }
+  // Aktualisiert ein ausgewähltes Kalenderereignis
   async updateKlausurEvent() {
     const klausurId = this.updateEvent.klausurId;
     const date = this.calendarForm.get('updateDate')?.value;
@@ -271,7 +275,6 @@ export class CalendarComponent implements OnInit {
         this.isChangeOrDeleteOpen = false;
 
       } catch (error) {
-        console.log(error);
         this.isInValid = true;
       } finally {
         this.fullcalendar.getApi().refetchEvents();
@@ -280,6 +283,7 @@ export class CalendarComponent implements OnInit {
       this.isInValid = true;
     }
     }
+    // Behandelt den Logout-Vorgang
     onLogOut(){
       this.authService.logout();
     }

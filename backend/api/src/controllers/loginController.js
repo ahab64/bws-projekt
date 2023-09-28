@@ -1,22 +1,25 @@
+//Autor: Sajiel Ahmad
 const { getUser } = require('../../../database/querys/main');
 const { getUserResponse } = require('../utils/getUserResponse');
 var bcrypt = require('bcryptjs');
 
+//Gibt einen User durch email
 function handleGetUser(req, res) {
-    const email = req.params.email;
-    const papa = "yarak";
-    res.json({ papa }); // Return the ID in a JSON response
+    const email = req.params.email; //Speichert die email
     getUser(email, (err, result) => {
         if (err) {
             console.error('Error querying data:', err);
+            res.status(500).json({error: 'Error querying data', err});
         } else {
             console.log('Query result:', getUserResponse(result));
+            res.status(500).json(result);
         }
     });
 }
 
+//Bearbeitet einen Login request
 function handleLogin(req, res) {
-    const requestData = req.body; // Access the request body
+    const requestData = req.body;
     console.log('Received POST request:', requestData);
     const email = requestData.email;
     const password = requestData.password;

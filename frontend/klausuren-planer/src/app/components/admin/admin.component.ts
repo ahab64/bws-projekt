@@ -1,3 +1,4 @@
+//Autor: Merlin Burbach
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
@@ -8,6 +9,7 @@ import { catchError, lastValueFrom } from 'rxjs';
 import { PendingUser } from 'src/app/models/pendingUser.model';
 import { AdminService } from 'src/app/services/admin.service';
 
+//Enthält die Admin Komponente
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -42,7 +44,6 @@ export class AdminComponent implements OnInit {
    
   }
   onChangeUserliste(event: any, user: PendingUser) {
-    console.log(this.selectedPendingUser);
     if (event.target.checked) {
       // Add the course to the user's selected courses
       this.selectedPendingUser.push(user);
@@ -60,10 +61,8 @@ export class AdminComponent implements OnInit {
   async onApprove() {
     for (const user of this.selectedPendingUser) {
       try {
-        console.log(user.user_id);
         await lastValueFrom(this.adminService.approveUser(user.user_id));
       } catch (error) {
-        console.log(error);
         this.failedApprovals.push({
           failed: true,
           user: user,

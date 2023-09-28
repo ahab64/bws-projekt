@@ -1,10 +1,12 @@
+//Autor: Furkan Kildan
 const { newKlausurtermin, updateKlausurTermin, deleteKlausurTermin } = require('../../../database/querys/main');
 
+//Trägt Klausurtermin ein
 async function handleNewKlausurTermin(req, res) {
     const newKlausurterminData = req.body;
     const kurs_id = newKlausurterminData.kurs_id;
     const date_start = newKlausurterminData.date_start;
-    const date_end = newKlausurterminData.date_ende;
+    const date_end = newKlausurterminData.date_ende; //Teilt JSON Werte in entsprechende Variablen
 
     try {
         await newKlausurtermin(kurs_id, date_start, date_end);
@@ -15,11 +17,12 @@ async function handleNewKlausurTermin(req, res) {
     }
 }
 
+//Updated einen Klausurtermin
 async function handleUpdateKlausurtermin(req, res) {
     const newKlausurterminData = req.body;
     const klausur_id = newKlausurterminData.klausur_id;
     const date_start = newKlausurterminData.date_start;
-    const date_end = newKlausurterminData.date_ende;
+    const date_end = newKlausurterminData.date_ende; //Teilt JSON Werte in entsprechende Variablen
 
     try {
         await updateKlausurTermin(klausur_id, date_start, date_end);
@@ -30,8 +33,9 @@ async function handleUpdateKlausurtermin(req, res) {
     }
 }
 
+//Löscht einen Klausurtermin
 async function handleDeleteTermin(req, res) {
-    const klausur_id = req.body.klausur_id;
+    const klausur_id = req.body.klausur_id; //Teilt JSON Werte in entsprechende Variablen
 
     try {
         await deleteKlausurTermin(klausur_id);

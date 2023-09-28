@@ -1,7 +1,9 @@
+//Autor: Furkan Kildan
 const { getEmailsInKurs } = require('../../../database/querys/main');
 
+//Gibt die Emails von allen Usern in einem Kurs
 async function handleEmailFromKurs(req, res) {
-  const { kurse } = req.body; 
+  const { kurse } = req.body; //Speichert Kurse
 
   getEmailsInKurs(kurse, (err, emails) => {
     if (err) {
