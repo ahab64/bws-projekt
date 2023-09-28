@@ -18,11 +18,10 @@ const { deleteKlausurtermin } = require("./utils/deleteKlausur");
 
 let db;
 
-//TO DO: remove error handling here
 async function getEmailsInKurs(kursName, callback) {
   db = openDatabase();
   try {
-    const emailsUndRollen = await getUsersInKurs(kursName, db, true);
+    const emailsUndRollen = await getUsersInKurs(kursName, db);
     callback(null, emailsUndRollen);
   } catch (error) {
     console.error('Fehler beim Abrufen der E-Mails im Kurs:', error);
@@ -32,8 +31,6 @@ async function getEmailsInKurs(kursName, callback) {
   }
 }
 
-
-//To do: refactor so logic is seperated in getUserFile
 function getUser(email, callback) {
   db = openDatabase();
   const query = "SELECT * FROM User WHERE email = ?";
@@ -71,23 +68,21 @@ function getUser(email, callback) {
   });
   closeDatabaseConnection(this.db);
 }
-//TO DO: remove error handling here
+
 async function newUser(name, email, password, kurse, rolle) {
-  const db = openDatabase(); // Die Datenbankverbindung nur einmal öffnen
+  const db = openDatabase(); 
 
   try {
-    //let kursIds = [];
     let userId;
 
     userId = await insertIntoUser(name, email, rolle, db);
     await insertIntoPassword(password, userId, db);
     await insertIntoKursUser(db, userId, kurse);
 
-    return userId; // Erfolg: Benutzer-ID zurückgeben
+    return userId;
   } catch (error) {
     console.error("Fehler bei der Benutzererstellung:", error);
 
-    // Fehler: Etwas anderes oder null zurückgeben, um den Fehler anzuzeigen
     return null;
   } finally {
     closeDatabaseConnection(db);
@@ -128,7 +123,6 @@ async function getKurseUser(userId) {
       return []; // Wenn kein Kurs gefunden wird, gib ein leeres Array zurück
     }
 
-    // Überprüfe, ob es Kurse ohne Klausurtermine gibt
     const kurseMitKlausurtermine = kurse.filter(
       (kurs) => kurs.date_start || kurs.date_ende
     );
