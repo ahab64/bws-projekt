@@ -33,7 +33,6 @@ async function getEmailsInKurs(kursName, callback) {
   }
 }
 
-
 //Gibt einen User raus durch email
 function getUser(email, callback) {
   db = openDatabase();
@@ -78,8 +77,7 @@ async function newUser(name, email, password, kurse, rolle) {
   const db = openDatabase();
 
   try {
-    let userId; //Speichert die neue User id
-
+    let userId;
     userId = await insertIntoUser(name, email, rolle, db);
     await insertIntoPassword(password, userId, db);
     await insertIntoKursUser(db, userId, kurse);
