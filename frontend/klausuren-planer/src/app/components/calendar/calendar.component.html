@@ -17,7 +17,9 @@
       </div>
       <div class="sidebar-section">
         <button *ngIf="canEdit" (click)="openEventPopup()">Klausur planen</button>
-        <button *ngIf="isAdmin" (click)="openAdminPopup()">Admin</button>
+        <button style="padding-left: 45px; padding-right: 45px;" *ngIf="isAdmin" (click)="openAdminPopup()">Admin</button>
+      </div>
+      <div class="sidebar-section">
         <button (click)="onLogOut()">Ausloggen</button>
       </div>
     </div>
