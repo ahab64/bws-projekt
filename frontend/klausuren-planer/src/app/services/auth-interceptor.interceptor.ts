@@ -20,9 +20,10 @@ export class AuthInterceptor implements HttpInterceptor {
     const isLoginRequest = req.url.endsWith('/login');
     const isTextAssetRequest = req.url.endsWith('/text-inhalte.json');
     const isRegistrationRequest = req.url.endsWith('/registration');
+    const isKursFromUserReq = req.url.endsWith('/kursefromlevel')
     // Wenn die Anfrage eine Login-Anfrage, eine Anfrage für Textinhalte oder eine Registrierungsanfrage ist, 
     // wird sie ohne Änderungen weitergeleitet.
-    if (isLoginRequest || isTextAssetRequest || isRegistrationRequest) {
+    if (isKursFromUserReq || isLoginRequest || isTextAssetRequest || isRegistrationRequest) {
       return next.handle(req);
     }
 

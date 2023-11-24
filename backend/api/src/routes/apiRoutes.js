@@ -16,11 +16,11 @@ const { handleUpdateKlausurtermin } = require('../controllers/klausurController'
 router.get('/api/id/:email', auth, handleGetUser);
 router.post('/api/login', handleLogin);
 router.post('/api/registration', handleNewUser);
-router.post('/api/admin/user-approval', auth, handleUserApproval);
+router.post('/api/admin/user-approval', handleUserApproval);
 router.post('/api/kursfromuser', auth, handleKursFromUser);
-router.post('/api/kursefromlevel', auth, handleKursFromLevel);
-router.post('/api/csv',auth, handleCsvUser);
-router.post('/api/kursemail', auth, handleEmailFromKurs);
+router.post('/api/kursefromlevel' , handleKursFromLevel);
+router.post('/api/csv', handleCsvUser);
+router.post('/api/kursemail', handleEmailFromKurs);
 router.post('/api/klausureintrag', auth, handleNewKlausurTermin);
 router.post('/api/deleteTermin', auth, handleDeleteTermin);
 router.post('/api/updateTermin', auth, handleUpdateKlausurtermin);

@@ -65,16 +65,21 @@ export class RegistrationComponent implements OnInit {
 
   // Behandelt die Änderung der Klassenstufe und lädt die Kursliste
   async onChangeStufe(): Promise<Kurs[]> {
+    console.log('haloooo')
     try {
       const stufe = this.registrationForm.get('klasse')?.value;
+      console.log(stufe)
       const $kurse = await lastValueFrom(
         this.registrationService.getKurse(stufe),
       );
+      console.log($kurse)
       this.kursliste = $kurse;
       return $kurse;
     } catch (error) {
       this.loadingKurseFailed = true;
-      return [];
+      this.kursliste = [];
+      throw error
+      
     }
   }
 

@@ -127,11 +127,13 @@ export class CalendarService {
       const $eventData = await lastValueFrom(
         this.getCalendarInformation(userId)
       );
+      console.log($eventData)
       return {
         transformed: this.transformEventData($eventData),
         raw: $eventData,
       };
     } catch (error) {
+
       throw error;
     }
   }
@@ -159,11 +161,13 @@ export class CalendarService {
     eventData: KlausurEvent[] | undefined
   ): EventInput[] {
     if (!eventData) {
+      console.log('hallo')
       return [];
     }
+    console.log(1244)
     return eventData.map((event) => ({
       id: event.id.toString(),
-      groupId: event.klausur_id.toString(),
+      groupId: event.klausur_id ? event.klausur_id.toString() : '',
       title: `${event.kursname} bei ${event.kurslehrer}`,
       start: event.date_start,
       end: event.date_ende,
